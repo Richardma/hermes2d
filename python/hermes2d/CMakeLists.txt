@@ -1,6 +1,6 @@
 add_subdirectory(examples)
 cython_add_module(_hermes2d dummy_solver.cpp stdcython.c)
-target_link_libraries(_hermes2d ${HERMES_REAL_BIN})
+target_link_libraries(_hermes2d ${HERMES_REAL_BIN} ${PYTHON_LIBRARIES})
 if(WITH_PYTHON_UMFPACK)
     find_package(UMFPACK REQUIRED)
     include_directories(${UMFPACK_INCLUDE_DIR} ${AMD_INCLUDE_DIR})
@@ -13,7 +13,7 @@ endif(WITH_PYTHON_UMFPACK)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/config.h)
 
 cython_add_module(forms)
-target_link_libraries(forms ${HERMES_REAL_BIN})
+target_link_libraries(forms ${HERMES_REAL_BIN} ${PYTHON_LIBRARIES})
 install(TARGETS forms LIBRARY DESTINATION lib/python/hermes2d)
 set_target_properties(forms PROPERTIES
     INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib/python/hermes2d"
