@@ -573,6 +573,12 @@ bool H1OrthoHP::adapt(double thr, int strat, bool h_only, bool iso_only, int max
     if ((strat == 1) && (err < thr * errors[esort[0][1]][esort[0][0]])) { nref = i; break; }
 
     if ((strat == 2) && (err < thr)) { nref = i; break; }
+
+    if ( (strat == 3) && 
+         ((err < thr * errors[esort[0][1]][esort[0][0]]) || 
+          ( (processed_error > 1.5 * to_be_processed) && fabs((err - err0)/err0) > 1e-3)))
+        { nref = i; break; }
+
     
     if ((strat == 3) && 
         ( (err < thr * errors[esort[0][1]][esort[0][0]]) || 

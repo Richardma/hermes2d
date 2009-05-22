@@ -338,6 +338,8 @@ void Solution::set_fe_solution(Space* space, PrecalcShapeset* pss, scalar* vec, 
   if (space->get_shapeset() != pss->get_shapeset())
     error("'space' and 'pss' must have the same shapesets.");
 
+  space_type = space->get_type();
+  
   free();
 
   num_components = pss->get_num_components();
@@ -648,6 +650,88 @@ static inline void vec_x_vec_p_vec(int n, scalar* y, scalar* x, scalar* z)
 }
 
 
+const int GRAD = FN_DX_0 | FN_DY_0;
+const int CURL = FN_DX | FN_DY; 
+
+
+void Solution::transform_values(Node* node, int newmask, int oldmask, int np)
+{
+  double2x2 *mat, *m;
+  int i, mstep = 0;
+  
+  // H1 space
+  if (space_type == 0)
+  {
+    if ((newmask & GRAD) == GRAD && (oldmask & GRAD) != GRAD)
+    { 
+      update_refmap();
+      mat = refmap->get_const_inv_ref_map();
+      if (!refmap->is_jacobian_const()) { mat = refmap->get_inv_ref_map(order); mstep = 1; } 
+      
+      for (i = 0, m = mat; i < np; i++, m += mstep)
+      {
+        scalar vx = node->values[0][1][i];
+        scalar vy = node->values[0][2][i];
+        node->values[0][1][i] = (*m)[0][0]*vx + (*m)[0][1]*vy;
+        node->values[0][2][i] = (*m)[1][0]*vx + (*m)[1][1]*vy;
+      }
+    }
+  }
+  
+  // Hcurl space
+  else if (space_type == 1)
+  {
+    bool trans_val = false, trans_curl = false;
+    if ((newmask & FN_VAL) == FN_VAL && (oldmask & FN_VAL) != FN_VAL) trans_val  = true;
+    if ((newmask &   CURL) ==   CURL && (oldmask &   CURL) !=   CURL) trans_curl = true;
+    
+    if (trans_val || trans_curl)
+    { 
+      update_refmap();
+      mat = refmap->get_const_inv_ref_map();
+      if (!refmap->is_jacobian_const()) { mat = refmap->get_inv_ref_map(order); mstep = 1; } 
+      
+      for (i = 0, m = mat; i < np; i++, m += mstep)
+      {
+        if (trans_val) 
+        {
+          scalar vx = node->values[0][0][i];
+          scalar vy = node->values[1][0][i];
+          node->values[0][0][i] = (*m)[0][0]*vx + (*m)[0][1]*vy;
+          node->values[1][0][i] = (*m)[1][0]*vx + (*m)[1][1]*vy;
+        }
+        if (trans_curl)
+        {
+          scalar e0x = node->values[0][1][i], e0y = node->values[0][2][i];
+          scalar e1x = node->values[1][1][i], e1y = node->values[1][2][i];
+          node->values[1][1][i] = (*m)[0][0]*((*m)[1][0]*e0x + (*m)[1][1]*e1x) + (*m)[0][1]*((*m)[1][0]*e0y + (*m)[1][1]*e1y);
+          node->values[0][2][i] = (*m)[1][0]*((*m)[0][0]*e0x + (*m)[0][1]*e1x) + (*m)[1][1]*((*m)[0][0]*e0y + (*m)[0][1]*e1y);
+        }
+      } 
+    }
+  }    
+    
+  // Hdiv space
+  else if (space_type == 2)
+  {
+    if ((newmask & FN_VAL) == FN_VAL && (oldmask & FN_VAL) != FN_VAL)
+    { 
+      update_refmap();
+      mat = refmap->get_const_inv_ref_map();
+      if (!refmap->is_jacobian_const()) { mat = refmap->get_inv_ref_map(order); mstep = 1; } 
+        
+      for (i = 0, m = mat; i < np; i++, m += mstep)
+      {
+        scalar vx = node->values[0][0][i];
+        scalar vy = node->values[1][0][i];
+        node->values[0][0][i] =   (*m)[1][1]*vx - (*m)[1][0]*vy;
+        node->values[1][0][i] = - (*m)[0][1]*vx + (*m)[0][0]*vy;
+      }
+    }
+  } 
+}
+
+
 void Solution::precalculate(int order, int mask)
 {
   int i, j, k, l;
@@ -664,11 +748,13 @@ void Solution::precalculate(int order, int mask)
     const int CURL = FN_DX | FN_DY; // sic
     if (transform)
     {
-      if (num_components == 1)
+      if (num_components == 1)                                            // H1 space
         { if ((mask & FN_DX_0)  || (mask & FN_DY_0))  mask |= GRAD; }
-      else
+      else if (space_type == 1)                                           // Hcurl space
         { if ((mask & FN_VAL_0) || (mask & FN_VAL_1)) mask |= FN_VAL;
           if ((mask & FN_DX_1)  || (mask & FN_DY_0))  mask |= CURL; }
+      else                                                                // Hdiv space
+        { if ((mask & FN_VAL_0) || (mask & FN_VAL_1)) mask |= FN_VAL; }
     }
     
     int oldmask = (cur_node != NULL) ? cur_node->mask : 0;
@@ -716,23 +802,26 @@ void Solution::precalculate(int order, int mask)
       }
     }
   
-    // transform gradient or vector solution, if required
+    // transform gradient or vector solution, if required    
     if (transform)
-    {
-      bool trans1 = false, trans2 = false;
+      transform_values(node, newmask, oldmask, np);
+      
+/*      bool trans1 = false, trans2 = false, trans3 = false;
       scalar *tab1, *tab2;
       scalar *tab0x, *tab0y, *tab1x, *tab1y;  
-      if (num_components == 1 && (newmask & GRAD) == GRAD && (oldmask & GRAD) != GRAD)
+      if (space_type == 0 && (newmask & GRAD) == GRAD && (oldmask & GRAD) != GRAD)
         { trans1 = true; tab1 = node->values[0][1]; tab2 = node->values[0][2]; }
-      else if (num_components == 2 && (newmask & FN_VAL) == FN_VAL && (oldmask & FN_VAL) != FN_VAL)
+      if (space_type == 1 && (newmask & FN_VAL) == FN_VAL && (oldmask & FN_VAL) != FN_VAL)
         { trans1 = true; tab1 = node->values[0][0]; tab2 = node->values[1][0]; }
-      if (num_components == 2 && (newmask & CURL) == CURL && (oldmask & CURL) != CURL)
+      if (space_type == 1 && (newmask & CURL) == CURL && (oldmask & CURL) != CURL)
         { trans2 = true; tab0x = node->values[0][1]; tab0y = node->values[0][2]; 
                          tab1x = node->values[1][1]; tab1y = node->values[1][2]; }
+      if (space_type == 2 && (newmask & FN_VAL) == FN_VAL && (oldmask & FN_VAL) != FN_VAL)
+        { trans3 = true; tab1 = node->values[0][0]; tab2 = node->values[1][0]; }
       
       double2x2 *mat, *m;
       int mstep = 0;
-      if (trans1 || trans2)
+      if (trans1 || trans2 || trans3)
       {
         update_refmap();
         mat = refmap->get_const_inv_ref_map();
@@ -760,7 +849,18 @@ void Solution::precalculate(int order, int mask)
           tab0y[i] = (*m)[1][0]*((*m)[0][0]*e0x + (*m)[0][1]*e1x) + (*m)[1][1]*((*m)[0][0]*e0y + (*m)[0][1]*e1y);
         }
       }
-    }
+      // transformation of values in Hdiv
+      if (trans3)
+      {      
+        for (i = 0, m = mat; i < np; i++, m += mstep)
+        {
+          scalar vx = tab1[i], vy = tab2[i];
+          tab1[i] =   (*m)[1][1]*vx - (*m)[1][0]*vy;
+          tab2[i] = - (*m)[0][1]*vx + (*m)[0][0]*vy;
+        }
+      }*/
+      
+   
   }
   else if (type == EXACT)
   {

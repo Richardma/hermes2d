@@ -45,6 +45,8 @@ public:
   void fix_vertex(int id, scalar value = 0.0);
 
   virtual Space* dup(Mesh* mesh) const;
+  
+  virtual int get_type() const { return 0; }
 
 protected:
   
