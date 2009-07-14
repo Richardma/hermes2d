@@ -777,22 +777,22 @@ def test_loader7():
 
 def test_errors():
     mesh = """\
-    a = %s
-    vertices =
-    {
-      { 0, -1 }, # first vertex
-      { 0.707106781, 0.707106781 }
-    }
+a = %s
+vertices =
+{
+  { 0, -1 }, # first vertex
+  { 0.707106781, 0.707106781 }
+}
 
-    elements =
-    {
-      { 0, 1, 4, 3, 0 }
-    }
+elements =
+{
+  { 0, 1, 4, 3, 0 }
+}
 
-    boundaries =
-    {
-      { 0, 1, 1 }
-    }
+boundaries =
+{
+  { 0, 1, 1 }
+}
     """
     # this works:
     read_hermes_format_str(mesh % "34")
@@ -809,21 +809,21 @@ def test_division():
     E.g. 3/2 is 1.5, not 1 in the mesh file. This test tests it.
     """
     mesh = """\
-    vertices =
-    {
-      { 0, -1 },
-      { %s, 0.707106781 }
-    }
+vertices =
+{
+  { 0, -1 },
+  { %s, 0.707106781 }
+}
 
-    elements =
-    {
-      { 0, 1, 4, 3, 0 }
-    }
+elements =
+{
+  { 0, 1, 4, 3, 0 }
+}
 
-    boundaries =
-    {
-      { 0, 1, 1 }
-    }
+boundaries =
+{
+  { 0, 1, 1 }
+}
     """
     nodes, elements, boundaries, _ = read_hermes_format_str(mesh % "3")
     assert compare(nodes, ((0, -1), (3, 0.70710678100000002)))

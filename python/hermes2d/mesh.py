@@ -72,19 +72,16 @@ def evaluate(s, namespace):
         raise ParseError("Failed to evaluate: %s" % s)
     return r
 
-def evaluate_list(s, namespace):
+def evaluate_list(s):
     """
     Evaluates each item in the list recursively.
 
     Converts the list to a tuple.
     """
     if hasattr(s, "__iter__"):
-        return tuple([evaluate_list(y, namespace) for y in s])
+        return tuple([evaluate_list(y) for y in s])
     else:
-        if isinstance(s, str):
-            return evaluate(s, namespace)
-        else:
-            return x
+        return s
 
 def read_hermes_format(filename):
     """
@@ -103,17 +100,21 @@ def read_hermes_format_str(m):
     Returns nodes, elements, boundary, nurbs or raises a ParseError if the
     syntax is invalid.
     """
-    try:
-        result = mesh.parseString(m)
-    except ParseException, e:
-        raise ParseError(str(e))
+    m = m.strip()
+    m = m.replace("=\n", "= \\\n")
+    m = m.replace("{", "[")
+    m = m.replace("}", "]")
+    m = m.replace("^", "**")
+    import math
     namespace = {}
-    for k, v in result:
-        namespace[k] = evaluate_list(v, namespace)
+    try:
+        exec m in math.__dict__, namespace
+    except SyntaxError, e:
+        raise ParseError(str(e))
     nodes = namespace.pop("vertices", None)
     elements = namespace.pop("elements", None)
     boundary = namespace.pop("boundaries", None)
     nurbs = namespace.pop("curves", None)
     if nodes is None or elements is None or boundary is None:
         raise ParseError("Either nodes, elements or boundary is missing")
-    return nodes, elements, boundary, nurbs
+    return evaluate_list(nodes), evaluate_list(elements), evaluate_list(boundary), evaluate_list(nurbs)
