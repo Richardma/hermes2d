@@ -562,7 +562,7 @@ def test_expr():
     assert t("b + w/2", "b+w/2")
     assert t("0.1")
     assert t("0.7")
-    assert t("sqrt(l^2 - (l-t)^2)", "sqrt(l^2-(l-t)^2)")
+    assert t("sqrt(l^2 - (l-t)^2)", "sqrt(l**2-(l-t)**2)")
     assert t("atan(b/l)")
     assert t("atan(a/(l-t))")
     assert t("delta - alpha", "delta-alpha")

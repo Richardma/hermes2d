@@ -25,7 +25,7 @@ def expr_grammar():
     rpar  = Literal( ")" )
     addop  = plus | minus
     multop = mult | div
-    expop = Literal( "^" )
+    expop = Literal( "^" ).setParseAction(lambda : "**")
     pi    = CaselessLiteral( "pi" )
 
     expr = Forward()
@@ -60,13 +60,12 @@ def evaluate(s, namespace):
     """
     Evaluates the string "s" in the namespace of "namespace".
 
-    The math module is automatically included in globals and "^" is converted
-    to "**". Otherwise it has to be a valid Python syntax.
+    The math module is automatically included in globals, otherwise it has to
+    be a valid Python syntax.
     """
     import math
     glob = {}
     glob.update(math.__dict__)
-    s = s.replace("^", "**")
     try:
         r = eval(s, glob, namespace)
     except:
