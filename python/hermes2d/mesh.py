@@ -3,7 +3,7 @@ from __future__ import division
 from pyparsing import (Word, Combine, Optional, alphas, alphanums, oneOf,
                 delimitedList, Group, nums, Literal, OneOrMore,
                 CaselessLiteral, Forward, ZeroOrMore, restOfLine,
-                ParseException)
+                ParseException, Regex)
 
 class ParseError(Exception):
     pass
@@ -15,11 +15,7 @@ def expr_grammar():
     """
     Returns the grammar for an expression.
     """
-    point = Literal( "." )
-    e     = CaselessLiteral( "E" )
-    fnumber = Combine( Word( "+-"+nums, nums ) +
-                       Optional( point + Optional( Word( nums ) ) ) +
-                       Optional( e + Word( "+-"+nums, nums ) ) )
+    fnumber = Regex(r"[-+]?\d+(\.\d*)?([eE][-+]?\d+)?")
 
     plus  = Literal( "+" )
     minus = Literal( "-" )
