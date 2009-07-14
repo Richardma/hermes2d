@@ -1,4 +1,4 @@
-from hermes2d.mesh import read_hermes_format_str, expr, ParseError
+from hermes2d.mesh import read_hermes_format_str, ParseError
 from hermes2d import raises
 
 mesh1 = """\
@@ -528,57 +528,6 @@ def compare(a, b, eps=1e-9):
         if not (abs(x-y) < eps):
             return False
     return True
-
-def test_expr():
-    def t(x, correct_result=None):
-        r = list(expr.parseString(x))
-        if correct_result is not None:
-            return r == [correct_result]
-        else:
-            return r == [x]
-    assert t("1")
-    assert t("-1")
-    assert t("+1")
-    assert t("1.245")
-    assert t("-1.245")
-    assert t("+1.245")
-    assert t("a")
-    assert t("-a")
-    assert t("a-b")
-    assert t("sqrt(2)/2")
-    assert t("a*b")
-    assert t("5/2")
-    assert t("1/(2*sqrt(2))")
-    assert t("0.20")
-    assert t("S1 - A", "S1-A")
-    assert t("S1 + A", "S1+A")
-    assert t("L/3")
-    assert t("2*L/3")
-    assert t("L")
-    assert t("S2 - A", "S2-A")
-    assert t("S2 + A + EPS", "S2+A+EPS")
-    assert t("4*a")
-    assert t("b - w/2", "b-w/2")
-    assert t("b + w/2", "b+w/2")
-    assert t("0.1")
-    assert t("0.7")
-    assert t("sqrt(l^2 - (l-t)^2)", "sqrt(l**2-(l-t)**2)")
-    assert t("atan(b/l)")
-    assert t("atan(a/(l-t))")
-    assert t("delta - alpha", "delta-alpha")
-    assert t("pi/2 - 2*delta", "pi/2-2*delta")
-    assert t("(l-t)*sin(alpha)")
-    assert t("(l-t)*cos(alpha)")
-    assert t("(l-t)*sin(delta)")
-    assert t("(l-t)*cos(delta)")
-    assert t("180*alpha/pi")
-    assert t("180*beta/pi")
-    assert t("180*gamma/pi")
-    assert t("l-t")
-    assert t("l-q*t")
-    assert t("-q*t")
-    assert t("A*sin(x) + B*cos(x) + pi/2 - some_result",
-            "A*sin(x)+B*cos(x)+pi/2-some_result")
 
 def test_loader1():
     nodes, elements, boundary, nurbs = read_hermes_format_str(mesh1)
