@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 
   H1Shapeset shapeset;
   PrecalcShapeset pss(&shapeset);
-  
+
   H1Space space(&mesh, &shapeset);
   space.set_bc_types(bc_types);
   space.set_uniform_order(5);
@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
   wf.add_biform(0, 0, bilinear_form);
   wf.add_liform(0, linear_form);
   wf.add_liform_surf(0, linear_form_surf, ANY);
-  
+
   UmfpackSolver umfpack;
   LinSystem sys(&wf, &umfpack);
   sys.set_spaces(1, &space);
@@ -50,10 +50,10 @@ int main(int argc, char* argv[])
   Solution sln;
   sys.assemble();
   sys.solve(1, &sln);
-  
+
   ScalarView view("Solution");
   view.show(&sln);
-  
+
   View::wait();
   return 0;
 }

@@ -61,11 +61,11 @@ int main(int argc, char* argv[])
 
   ScalarView view("Solution", 200, 150, 1000, 900);
   view.show(&sln);
-  
+
   /*view.wait_for_keypress();
   sln.multiply(2);
   view.show(&sln);*/
-  
+
   /*view.wait_for_keypress();
   xx = 3.0;
   sys.assemble_rhs_only();

@@ -87,9 +87,9 @@ int main(int argc, char* argv[])
   dp.create_matrix();
   dp.assemble_matrix_and_rhs();
   dp.solve_system(1, &sln);
-  
+
   RealFilter real(&sln);
-  
+
   ScalarView view1("X component", 100, 50, 900, 900);
   view1.show(&real, EPS_HIGH, FN_VAL_0);
   view1.set_min_max_range(0, 5);
@@ -103,7 +103,7 @@ int main(int argc, char* argv[])
   view3.set_min_max_range(0.2, 2.5);
   view3.show_contours(0.1);
   view3.show(&mag, EPS_HIGH);
-  
+
   VectorView view4;
   view4.show(&sln);
 

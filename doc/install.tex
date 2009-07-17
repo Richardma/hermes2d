@@ -20,14 +20,14 @@ used internally by Hermes2D. Please refer to the web pages of these projects for
 instructions on how to download and install them. Alternatively, you may want to
 consult your system's package manager to have these packages
 installed automatically for you. For example, on Debian and Ubuntu systems, you
-can install the packages with the command 
+can install the packages with the command
 \begin{lstlisting}
 sudo apt-get install libsuitesparse-dev freeglut3-dev libjudy-dev
 \end{lstlisting}
 % TODO: verify the above
 % TODO: mention that we need a recent UMFPACK version, at least 5.1
 
-After downloading \verb"hermes2d-X.Y.Z.tar.bz2" to your home directory, unpack it with 
+After downloading \verb"hermes2d-X.Y.Z.tar.bz2" to your home directory, unpack it with
 the command
 \begin{lstlisting}
  tar xjvf hermes2d-X.Y.Z.tar.bz2
@@ -45,7 +45,7 @@ produce the following files in {\tt hermes2d/lib}:
    libhermes2d-gcc-O-cplx.a
 \end{verbatim}}
 These are different versions of the library, depending on whether it is a debugging
-or optimized ({\tt g} or {\tt O}) and real or complex build. 
+or optimized ({\tt g} or {\tt O}) and real or complex build.
 
 You may also use one of the predefined files, such as {\tt Make.config.Debian},
 in the following way:
@@ -55,7 +55,7 @@ in the following way:
  make
 \end{lstlisting}
 
-Examples from this manual are located in the directory {\tt hermes2d/examples} and 
+Examples from this manual are located in the directory {\tt hermes2d/examples} and
 should build with the rest of the library after typing {\tt make}.
 
 For creating your own projects, we suggest the following scheme. Create a directory,
@@ -100,12 +100,12 @@ use \verb"C:\Dev-Cpp"
 
 To ensure that important files such as the GCC compiler and the libraries can
 always be found, right-click My Computer and go to Properties / Advanced / Environment Variables.
-Press the New button and enter a variable called ``Path'' containing the 
+Press the New button and enter a variable called ``Path'' containing the
 text
 \begin{lstlisting}
 C:\Dev-Cpp\bin;C:\Dev-Cpp\include;C:\Dev-Cpp\lib
 \end{lstlisting}
-as shown in Figure \ref{fig:win-env}. 
+as shown in Figure \ref{fig:win-env}.
 
 \begin{figure}[ht]
   \medskip \centering

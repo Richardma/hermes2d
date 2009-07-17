@@ -54,23 +54,23 @@ Hermes 2D User's Manual
 * Library Reference (detailni popis knihovny z userovy perspektivy)
 
   - Library initialization
-  
+
   - Class Hierarchy
 
   - Mesh Class
     - file format
     - Nurbs
     - debugging: odkaz na MeshView
-    
+
   - Shapeset Class
     - seznam shapesetu, vlastnosti
-    
+
   - Space Class
     - H1Space, HcurlSpace, L2Space
     - essential vs. natural boundary conditions
     - DOF assignment
     - debugging: odkaz na BaseView
-  
+
   - DiscreteProblem Class
     - initializing the class
     - bilinear forms (sym+unsym), linear forms
@@ -78,29 +78,29 @@ Hermes 2D User's Manual
     - matrix creation, assembly, repeated assembly
     - saving the matrix in Matlab format, obtaining in CSR format
     - debugging: odkaz na MatrixView
-  
+
   - Precalculation Classes
     - Function Class
     - PrecalcShapeset
     - Solution Class
-  
-  - Automatic Adaptivity
-    - 
 
-  - Visualization  
+  - Automatic Adaptivity
+    -
+
+  - Visualization
     - ScalarView Class
     - VectorView Class
     - OrderView
     - MeshView, BaseView, MatrixView
     - seznam hot-keys
-    
+
   - Postprocessing
     - calculation of norms
     - calculation of line integrals
     - Filter Class
       - list of filters
       - creating custom filters
-     
+
   - Exporting Results
     - odkaz na delani screenshotu
     - ulozeni PersistentSolution
@@ -109,7 +109,7 @@ Hermes 2D User's Manual
     - Graph Class
 
   - Using Custom Solvers
-  
+
 
 * Examples  (netrivialni priklady pouziti, ktere si lidi muzou ohnout/inspirovat se)
 
@@ -119,20 +119,20 @@ Hermes 2D User's Manual
     - Hcurl simple
     - Hcurl bessel
     - Hcurl screen (fresnel)
-  
+
   - Girkmann Problem
-  
+
   - Microwave Oven
-  
+
   - Thermoelasticity
-  
+
   - Stabilized N-S (?)
-  
+
   - Adaptive N-S
     - golfball?
-  
+
   - Non-linear elasticity (?)
-  
+
   - Non-linear coupled problem (?)
 
 
@@ -150,7 +150,7 @@ Hermes 2D User's Manual
   - An explanation of encapsulation for those who only know C
 
   - Other minor aspects of C++ (default parameters, ...)
-  
+
 
 * References
 

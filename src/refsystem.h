@@ -31,7 +31,7 @@ class Mesh;
 class RefSystem : public LinSystem
 {
 public:
-  
+
   RefSystem(LinSystem* base, int order_increase = 1, int refinement = 1);
   virtual ~RefSystem();
 
@@ -40,11 +40,11 @@ public:
   /// Do not call in this class
   void set_pss(int n, ...);
 
-  /// Creates reference (fine) meshes and spaces and assembles the 
+  /// Creates reference (fine) meshes and spaces and assembles the
   /// reference system.
   void assemble(bool rhsonly = false);
 
-  /// Frees reference spaces and meshes. Called 
+  /// Frees reference spaces and meshes. Called
   /// automatically on desctruction.
   void free_ref_data();
 

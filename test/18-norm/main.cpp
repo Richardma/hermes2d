@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
   space.set_bc_values(bc_values);
   space.set_uniform_order(4);
   space.assign_dofs();
-  
+
   DiscreteProblem dp;
   dp.set_num_equations(1);
   dp.set_spaces(1, &space);
@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
 
   ScalarView view("Solution", 200, 150, 1000, 900);
   view.show(&sln);
-  
+
   printf("%.18g\n", h1_error_norm(&sln, exact));
 
   hermes2d_finalize();

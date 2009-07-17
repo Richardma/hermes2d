@@ -1,5 +1,5 @@
-# Anjuta Version 1.2.4 
-Compatibility Level: 1 
+# Anjuta Version 1.2.4
+Compatibility Level: 1
 
 <PROJECT_DESCRIPTION_START>
 <PROJECT_DESCRIPTION_END>
@@ -39,7 +39,7 @@ project.excluded.modules=intl
 project.config.extra.modules.before=
 project.config.extra.modules.after=
 project.config.blocked=1
-project.config.disable.overwriting=1 1 1 1 1 1 1 1 1 
+project.config.disable.overwriting=1 1 1 1 1 1 1 1 1
 
 project.menu.entry=doc Version 0.99
 project.menu.group=Application
@@ -110,9 +110,9 @@ compiler.options.libraries.selected=
 compiler.options.defines=\
 	HAVE_CONFIG_H
 compiler.options.defines.selected=
-compiler.options.warning.buttons=0 0 1 1 0 1 0 0 0 0 0 0 0 1 0 0 
-compiler.options.optimize.buttons=0 0 1 0 
-compiler.options.other.buttons=1 0 
+compiler.options.warning.buttons=0 0 1 1 0 1 0 0 0 0 0 0 0 1 0 0
+compiler.options.optimize.buttons=0 0 1 0
+compiler.options.other.buttons=1 0
 compiler.options.other.c.flags=
 compiler.options.other.l.flags=
 compiler.options.other.l.libs=

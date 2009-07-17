@@ -49,14 +49,14 @@ int main(int argc, char* argv[])
   PrecalcShapeset pss(&shapeset);
   H1Space space(&mesh, &shapeset);
   Solution sln;
-  
+
   DiscreteProblem dp;
   dp.set_num_equations(1);
   dp.set_spaces(1, &space);
   dp.set_pss(1, &pss);
   dp.set_bilinear_form(0, 0, NULL, bilinear_form, bilinear_form_surf);
   dp.set_linear_form(0, linear_form, linear_form_surf);
-  
+
   mesh.load("newton1.mesh");
   mesh.refine_all_elements();
   mesh.refine_all_elements();
@@ -71,7 +71,7 @@ int main(int argc, char* argv[])
 
   ScalarView view1("Solution - triangles", 200, 150, 1000, 900);
   view1.show(&sln);
-  
+
   mesh.load("newton2.mesh");
   mesh.refine_all_elements();
   mesh.refine_all_elements();

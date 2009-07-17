@@ -1,10 +1,10 @@
 #include "hermes2d.h"
 #include "solver_umfpack.h"
 
-// This example demostrates the adaptive multimesh hp-FEM. The problem 
+// This example demostrates the adaptive multimesh hp-FEM. The problem
 // considered is rooted in linear thermoelasticity: a massive hollow conductor
-// is heated by induction and cooled by water running inside. We will approximate the 
-// x-displacement, y-displacement, and the temperature on individual meshes 
+// is heated by induction and cooled by water running inside. We will approximate the
+// x-displacement, y-displacement, and the temperature on individual meshes
 // equipped with mutually independent adaptivity mechanisms.
 //
 // PDE: Linear thermoelasticity
@@ -13,11 +13,11 @@
 //     du_1/dn = du_2/dn = 0 elsewhere
 //     temp = TEMP_INNER on Gamma_4
 //     negative heat flux with HEAT_FLUX_OUTER elsewhere
-//    
-// The parameters below can be played with. In particular, compare hp- and 
-// h-adaptivity via the H_ONLY option, and compare the multi-mesh vs. single-mesh 
+//
+// The parameters below can be played with. In particular, compare hp- and
+// h-adaptivity via the H_ONLY option, and compare the multi-mesh vs. single-mesh
 // using the MULTI parameter.
-// 
+//
 
 const bool MULTI = true;               // true = use multi-mesh, false = use single-mesh
                                        // Note: in the single mesh option, the meshes are
@@ -44,10 +44,10 @@ const bool ISO_ONLY = false;           // when ISO_ONLY = true, only isometric r
 const int MAX_ORDER = 6;               // maximal order used during adaptivity
 const int NDOF_STOP = 40000;           // adaptivity process stops when the number of degrees of freedom grows over
                                        // this limit. This is mainly to prevent h-adaptivity to go on forever.
-	
+
 double HEAT_SRC = 10000.0;       // heat source in the material (caused by induction heating)
-double TEMP_INNER = 50; 
-double HEAT_FLUX_OUTER = -50; 		  
+double TEMP_INNER = 50;
+double HEAT_FLUX_OUTER = -50;
 const double E = 2e11;           // steel: E=200 GPa
 const double nu = 0.3;
 const double lambda = (E * nu) / ((1 + nu) * (1 - 2*nu));
@@ -71,7 +71,7 @@ int bc_types_y(int marker)
 
 int bc_types_t(int marker)
   { return (marker == 4) ? BC_ESSENTIAL : BC_NATURAL; }
-  
+
 double bc_values_t(int marker, double x, double y)
   { return (marker == 4) ? TEMP_INNER : HEAT_FLUX_OUTER; }
 
@@ -106,11 +106,11 @@ scalar linear_form_surf_2(RealFunction* fv, RefMap* rv, EdgePos* ep)
   { return surf_int_G_v(fv, rv, ep); }
 
 
-/* 
+/*
 int crit(Element* e)
 {
   if (e->is_triangle()) return -1;
-    
+
   double2 mm[4];
   for (int i = 0; i < 4; i++)
   {
@@ -118,14 +118,14 @@ int crit(Element* e)
     mm[i][0] = (e->vn[i]->x + e->vn[j]->x) / 2;
     mm[i][1] = (e->vn[i]->y + e->vn[j]->y) / 2;
   }
-  
+
   double l1 = hypot(mm[0][0] - mm[2][0], mm[0][1] - mm[2][1]);
   double l2 = hypot(mm[1][0] - mm[3][0], mm[1][1] - mm[3][1]);
-  
+
   const double a = 1.2;
   if (l1 > a*l2) return 1;
   if (l2 > a*l1) return 2;
-  
+
   return -1;
 }
 */
@@ -148,7 +148,7 @@ int main(int argc, char* argv[])
   H1Space xdisp(&xmesh, &shapeset);
   xdisp.set_bc_types(bc_types_x);
   xdisp.set_uniform_order(P_INIT_DISP);
-  
+
   // create the y displacement space
   H1Space ydisp(MULTI ? &ymesh : &xmesh, &shapeset);
   ydisp.set_bc_types(bc_types_y);
@@ -190,7 +190,7 @@ int main(int argc, char* argv[])
   graph_cpu.set_captions("", "CPU", "error");
   graph_cpu.set_log_y();
   graph_cpu.add_row(MULTI ? "multi-mesh" : "single-mesh", "k", "-", "o");
-  
+
   Solution xsln, ysln, tsln;
   Solution xrsln, yrsln, trsln;
   UmfpackSolver umfpack;
@@ -225,15 +225,15 @@ int main(int argc, char* argv[])
     sview.set_min_max_range(0, 4e9);
     sview.show(&mises, EPS_HIGH);
     tview.show(&tsln, EPS_HIGH);
-    
+
     // solve the fine (reference) problem
-    begin_time();    
+    begin_time();
     RefSystem rs(&ls);
     rs.assemble();
     rs.solve(3, &xrsln, &yrsln, &trsln);
 
     H1OrthoHP hp(3, &xdisp, &ydisp, &temp);
-    double error = hp.calc_energy_error_n(3, &xsln, &ysln, &tsln, &xrsln, &yrsln, &trsln, 
+    double error = hp.calc_energy_error_n(3, &xsln, &ysln, &tsln, &xrsln, &yrsln, &trsln,
                    bilinear_form_unsym_0_0, bilinear_form_unsym_0_1, bilinear_form_unsym_0_2,
                    bilinear_form_unsym_1_0, bilinear_form_unsym_1_1, bilinear_form_unsym_1_2,
                    NULL,                    NULL,                    bilinear_form_unsym_2_2) * 100;

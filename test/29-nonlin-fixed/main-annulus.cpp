@@ -1,4 +1,4 @@
-// 
+//
 //  Nonlinear solver test:
 //
 //  PDE:  -\Delta u + u^3 = 0
@@ -31,7 +31,7 @@ inline double int_w2_u_v(RealFunction* w, RealFunction* fu, RealFunction* fv, Re
   fu->set_quad_order(o, FN_VAL);
   fv->set_quad_order(o, FN_VAL);
 
-  double *wval = w->get_fn_values();  
+  double *wval = w->get_fn_values();
   double *vval = fv->get_fn_values();
   double *uval = fu->get_fn_values();
 
@@ -48,7 +48,7 @@ inline double int_w3_v(RealFunction* w, RealFunction* fu, RefMap* ru)
   w->set_quad_order(o, FN_VAL);
   fu->set_quad_order(o, FN_VAL);
 
-  double *wval = w->get_fn_values();  
+  double *wval = w->get_fn_values();
   double *vval = fu->get_fn_values();
 
   h1_integrate_expression(wval[i] * wval[i] * wval[i] * vval[i]);
@@ -72,12 +72,12 @@ scalar linear_form_surf(RealFunction* fv, RefMap* rv, EdgePos* ep)
 // {
 //   return int_grad_u_grad_v(fu, fv, ru, rv);
 // }
-// 
+//
 // scalar linear_form(RealFunction* fv, RefMap* rv)
 // {
 //   return -int_w3_v(&uprev, fv, rv);
 // }
-//  
+//
 // scalar linear_form_surf(RealFunction* fv, RefMap* rv, EdgePos* ep)
 // {
 //   return -1.0/(sqr(B)) * surf_int_v(fv, rv, ep);
@@ -94,7 +94,7 @@ int bc_types(int marker)
 
 scalar bc_values(int marker, double x, double y)
 {
-  if (marker == 1) return 1.0 / A; 
+  if (marker == 1) return 1.0 / A;
   else return 1.0 / B;
 }
 
@@ -116,26 +116,26 @@ int main(int argc, char* argv[])
 
   H1Shapeset shapeset;
   PrecalcShapeset pss(&shapeset);
-  
+
   H1Space space(&mesh, &shapeset);
   //space.set_bc_types(bc_types);
   space.set_bc_values(bc_values);
   space.set_uniform_order(3);
   space.assign_dofs();
-  
+
   WeakForm wf(1);
   wf.add_biform(0, 0, bilinear_form, UNSYM, ANY, 1, &uprev);
   //wf.add_liform(0, linear_form, ANY, 1, &uprev);
   //wf.add_liform_surf(0, linear_form_surf, 2);
-  
+
   UmfpackSolver umfpack;
   LinSystem ls(&wf, &umfpack);
   ls.set_spaces(1, &space);
   ls.set_pss(1, &pss);
-  
+
   ScalarView view("Iteration", 0, 0, 880, 800);
   ScalarView errview("Error", 900, 0, 880, 800);
-  
+
   //uprev.set_exact(&mesh, exact);
   uprev.set_zero(&mesh);
 
@@ -147,7 +147,7 @@ int main(int argc, char* argv[])
   graph.set_captions("L2 error","iterations","error [%]");
   graph.add_row("fixed point");
 
-  double residuum, error;  
+  double residuum, error;
   int it = 0;
   do
   {
@@ -157,10 +157,10 @@ int main(int argc, char* argv[])
     ls.assemble();
 
     ls.solve(1, &sln);
-    info("residuum: %g", residuum = l2_error(&uprev, &sln)); 
+    info("residuum: %g", residuum = l2_error(&uprev, &sln));
     info("error: %g", error = l2_error(&sln, &exsln));
     info("");
-    
+
 //     graph.add_values(0, it, error);
 //     graph.save("conv.txt");
 
@@ -172,7 +172,7 @@ int main(int argc, char* argv[])
     uprev = sln;
   }
   while (error > 1e-5);
-  
+
   View::wait();
   return 0;
 }

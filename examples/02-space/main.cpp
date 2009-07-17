@@ -1,7 +1,7 @@
 #include "hermes2d.h"
 
 // This example demonstrates how to create a space over a mesh
-// and how to visualize basis functions. After you run this 
+// and how to visualize basis functions. After you run this
 // example, try to change P_INIT and/or the mesh and try again!
 
 int P_INIT = 5;
@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
   // load the mesh file
   Mesh mesh;
   mesh.load("domain.mesh");
-  mesh.refine_element(1);    // you can perform arbitrary other initial 
+  mesh.refine_element(1);    // you can perform arbitrary other initial
                              // refinements here, see example 01
 
   // create a shapeset and an H1 space

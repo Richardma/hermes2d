@@ -29,7 +29,7 @@
  * The file also includes a conditional assembly definition
  * for the type of computer arithmetic (IEEE, DEC, Motorola
  * IEEE, or UNKnown).
- * 
+ *
  * For Digital Equipment PDP-11 and VAX computers, certain
  * IBM systems, and others that use numbers with a 56-bit
  * significand, the symbol DEC should be defined.  In this
@@ -70,7 +70,7 @@
 Cephes Math Library Release 2.3:  June, 1995
 Copyright 1984, 1987, 1989, 1995 by Stephen L. Moshier
 */
-
+
 
 /* Define if the `long double' type works.  */
 #define HAVE_LONG_DOUBLE 1
@@ -273,7 +273,7 @@ extern int merror;
  *
  * These lists are subject to change.
  */
-
+
 /*              const.c */
 
 /*
@@ -496,7 +496,7 @@ extern unsigned short NEGZERO[];
  *
  * This routine may be called to report one of the following
  * error conditions (in the include file mconf.h).
- *  
+ *
  *   Mnemonic        Value          Significance
  *
  *    DOMAIN            1       argument domain error
@@ -525,7 +525,7 @@ extern unsigned short NEGZERO[];
  * mconf.h
  *
  */
-
+
 /*
 Cephes Math Library Release 2.0:  April, 1987
 Copyright 1984, 1987 by Stephen L. Moshier
@@ -623,7 +623,7 @@ return( 0 );
  * program in microcode or assembly language.
  *
  */
-
+
 
 /*
 Cephes Math Library Release 2.1:  December, 1988
@@ -1626,7 +1626,7 @@ return(0);
  * approximated by a rational function of degree 6/7 in the
  * interval (2,3).  Large arguments are handled by Stirling's
  * formula. Large negative arguments are made positive using
- * a reflection formula.  
+ * a reflection formula.
  *
  *
  * ACCURACY:
@@ -1641,7 +1641,7 @@ return(0);
  * Error for arguments outside the test range will be larger
  * owing to error amplification by the exponential function.
  *
- */
+ */
 /*              lgam()
  *
  *  Natural logarithm of gamma function
@@ -1695,7 +1695,7 @@ return(0);
  *    IEEE    -200, -4             10000     4.8e-16     1.3e-16
  *
  */
-
+
 /*              gamma.c */
 /*  gamma function  */
 
@@ -1782,7 +1782,7 @@ static unsigned short LPI[4] = {
 0xa1bd,0x48e7,0x50d0,0x3ff2,
 };
 #define LOGPI *(double *)LPI
-#endif 
+#endif
 
 #ifdef MIEEE
 static unsigned short P[] = {
@@ -1809,7 +1809,7 @@ static unsigned short LPI[4] = {
 0x3ff2,0x50d0,0x48e7,0xa1bd,
 };
 #define LOGPI *(double *)LPI
-#endif 
+#endif
 
 /* Stirling's formula for the gamma function */
 #if UNK
@@ -2327,7 +2327,7 @@ return( q );
  *    IEEE   -125,125   -125,125      50000      3.5e-15*   1.9e-16*
  *
  */
-
+
 
 /*
 Cephes Math Library Release 2.8:  June, 2000
@@ -2550,7 +2550,7 @@ else
 
 done:	return( sign * y);
 }
-
+
 /* Reduce the order by backward recurrence.
  * AMS55 #9.1.27 and 9.1.73.
  */
@@ -2730,7 +2730,7 @@ printf( "power series=%.5e ", y );
 t = frexp( 0.5*x, &ex );
 ex = (int) (ex * n);
 if(  (ex > -1023)
-  && (ex < 1023) 
+  && (ex < 1023)
   && (n > 0.0)
   && (n < (MAXGAM-1.0)) )
 	{
@@ -2772,7 +2772,7 @@ printf( "log y=%.5e\n", log(y) );
 	}
 return(y);
 }
-
+
 /* Hankel's asymptotic expansion
  * for large x.
  * AMS55 #9.2.5.
@@ -2825,7 +2825,7 @@ while( t > MACHEP )
 #endif
 		goto hank1;
 		}
-	}	
+	}
 
 hank1:
 u = x - (0.5*n + 0.25) * PI;
@@ -2835,7 +2835,7 @@ printf( "hank: %.6e\n", t );
 #endif
 return( t );
 }
-
+
 
 /* Asymptotic expansion for large n.
  * AMS55 #9.3.35.
@@ -3065,7 +3065,7 @@ t = sqrt( sqrt(t) );
 t *= ai*pp/cbrt(n)  +  aip*qq/(n23*n);
 return(t);
 }
-
+
 /* Asymptotic expansion for transition region,
  * n large and x close to n.
  * AMS55 #9.3.23.

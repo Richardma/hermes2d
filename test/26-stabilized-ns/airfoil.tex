@@ -62,10 +62,10 @@ Linear system for Hermes2D in details:
 \hline
 & & & \\
 $\displaystyle{\frac{(u_1,v_1)}{\tau} + \frac{1}{Re}
- (\nabla u_1,\nabla v_1)} $ &  & $\displaystyle{ -\, \left(p, \frac{\partial v_1}{\partial x}\right)}$ & $\displaystyle{\left(\frac{u_1^{n-1}}{\tau} v_1\right)}$\\ 
+ (\nabla u_1,\nabla v_1)} $ &  & $\displaystyle{ -\, \left(p, \frac{\partial v_1}{\partial x}\right)}$ & $\displaystyle{\left(\frac{u_1^{n-1}}{\tau} v_1\right)}$\\
 & & & \\
 $\displaystyle{ + \left(\left(\bfu^{n-1} \cdot \nabla
-   \right)u_1,v_1\right) } $ &  &  & \\ 
+   \right)u_1,v_1\right) } $ &  &  & \\
 & & & \\
 $\displaystyle{ +\, \delta_K
     \left(\frac{1}{\tau}u_1 - \frac{1}{Re}\Delta u_1 +
@@ -80,10 +80,10 @@ $\displaystyle{ + \,\tau_K\left(\frac{\partial u_1}{\partial x}, \, \frac{\parti
 \hline
 & & & \\
  & $\displaystyle{\frac{(u_2,v_2)}{\tau} + \frac{1}{Re}
- (\nabla u_2,\nabla v_2)}$ & $\displaystyle{ - \,\left(p, \frac{\partial v_2}{\partial y}\right)}$ & $\displaystyle{\left(\frac{u_2^{n-1}}{\tau} v_2\right)}$\\ 
+ (\nabla u_2,\nabla v_2)}$ & $\displaystyle{ - \,\left(p, \frac{\partial v_2}{\partial y}\right)}$ & $\displaystyle{\left(\frac{u_2^{n-1}}{\tau} v_2\right)}$\\
 & & & \\
  & $\displaystyle{+ \left(\left(\bfu^{n-1} \cdot \nabla
-   \right)u_2,v_2\right)}$ &  &\\ 
+   \right)u_2,v_2\right)}$ &  &\\
 & & & \\
 & $\displaystyle{+ \delta_K
     \left(\frac{1}{\tau}u_2 - \frac{1}{Re}\Delta u_2 +
@@ -91,14 +91,14 @@ $\displaystyle{ + \,\tau_K\left(\frac{\partial u_1}{\partial x}, \, \frac{\parti
     \left(\frac{u_2^{n-1}}{\tau},\,
     (\bfu^{n-1}\cdot\nabla)\,v_2\right)}$\\
 & & & \\
-& $\displaystyle{\qquad \qquad 
+& $\displaystyle{\qquad \qquad
     \left. (\bfu^{n-1}\cdot\nabla)\,v_2\right)}$ &  & \\
 & & & \\
 $\displaystyle{\tau_K\left(\frac{\partial u_1}{\partial x}, \, \frac{\partial v_y}{\partial y} \right)}$ & $\displaystyle{ + \,\tau_K\left(\frac{\partial u_2}{\partial y}, \, \frac{\partial v_2}{\partial y} \right)}$ & & \\
 & & & \\
 \hline
 & & & \\
-$\displaystyle{(\frac{\partial u_1}{\partial x}, q)}$ & $\displaystyle{(\frac{\partial u_2}{\partial y}, q)}$ &  & 0 \\ 
+$\displaystyle{(\frac{\partial u_1}{\partial x}, q)}$ & $\displaystyle{(\frac{\partial u_2}{\partial y}, q)}$ &  & 0 \\
 & & & \\
 \hline
 \end{tabular}

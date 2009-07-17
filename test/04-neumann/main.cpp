@@ -1,9 +1,9 @@
-// Neumann BC test: 
+// Neumann BC test:
 //
 // Exact solution: u = x^2
 //
 // PDE: -\Delta u = -2,  \Omega = (0,1)^2
-// 
+//
 // u = 0      on  x = 0
 // du/dn = 0  on  y = 0, y = 1
 // du/dn = 2  on  x = 1
@@ -45,16 +45,16 @@ int main(int argc, char* argv[])
   H1Space space(&mesh, &shapeset);
   Solution sln;
   UmfpackSolver umfpack;
-  
+
   WeakForm wf(1);
   wf.add_biform(0, 0, bilinear_form);
   wf.add_liform(0, linear_form);
   wf.add_liform_surf(0, linear_form_surf_marker_2, 2);
-  
+
   LinSystem sys(&wf, &umfpack);
   sys.set_spaces(1, &space);
   sys.set_pss(1, &pss);
-  
+
   mesh.load("neumann1.mesh");
   mesh.refine_element(0);
   mesh.refine_all_elements();
@@ -65,10 +65,10 @@ int main(int argc, char* argv[])
 
   sys.assemble();
   sys.solve(1, &sln);
-  
+
   ScalarView view1("Solution - triangles", 200, 150, 1000, 900);
   view1.show(&sln);
-  
+
   mesh.load("neumann2.mesh");
   mesh.refine_all_elements();
   mesh.refine_all_elements();

@@ -1,4 +1,4 @@
-// 
+//
 //  Nonlinear solver test:
 //
 //  PDE:  -\Delta u + u^3 = 0
@@ -52,7 +52,7 @@ int bc_types(int marker)
 
 scalar bc_values(int marker, double x, double y)
 {
-  if (marker == 1) return 1.0 / A; 
+  if (marker == 1) return 1.0 / A;
 }
 
 scalar exact(double x, double y, scalar& dx, scalar& dy)
@@ -73,26 +73,26 @@ int main(int argc, char* argv[])
 
   H1Shapeset shapeset;
   PrecalcShapeset pss(&shapeset);
-  
+
   H1Space space(&mesh, &shapeset);
   space.set_bc_types(bc_types);
   space.set_bc_values(bc_values);
   space.set_uniform_order(3);
   space.assign_dofs();
-  
+
   WeakForm wf(1);
   wf.add_biform(0, 0, jacobian, UNSYM, ANY, 1, &uprev);
   wf.add_liform(0, residual, ANY, 1, &uprev);
   wf.add_liform_surf(0, residual_surf, 2);
-  
+
   UmfpackSolver umfpack;
   NonlinSystem nls(&wf, &umfpack);
   nls.set_spaces(1, &space);
   nls.set_pss(1, &pss);
-  
+
   ScalarView view("Iteration", 0, 0, 880, 800);
   ScalarView errview("Error", 900, 0, 880, 800);
-  
+
   // uprev must contain the dirichlet lift at the beginning
   uprev.set_const(&mesh, 0.0);
   nls.set_ic(&uprev, &uprev);
@@ -102,27 +102,27 @@ int main(int argc, char* argv[])
   do
   {
     info("\n---- Iteration %d ---------------------------------------\n", it++);
-    
+
     Solution sln;
     nls.assemble();
     nls.solve(1, &sln);
     info("Residuum L2 norm: %g\n", nls.get_residuum_l2_norm());
-    
+
     view.show(&sln);
-    
+
     ExactSolution exsln(&mesh, exact);
     DiffFilter err(&sln, &exsln);
     errview.show(&err);
 //     errview.wait_for_keypress();
-    
+
     l2e = l2_error(&sln, &exsln);
     info("L2 error: %g", l2e);
-    
+
     uprev = sln;
   }
   while (nls.get_residuum_l2_norm() > 1e-4);
   //while (l2e > 1e-5);
-  
+
   View::wait();
   return 0;
 }

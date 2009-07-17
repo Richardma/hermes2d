@@ -3,7 +3,7 @@ include ../../Make.config
 NAME   = bessel
 HERMES = ../../lib/libhermes2d-$(CC)-O-cplx.a
 #FLAGS  = -ggdb -DCOMPLEX
-FLAGS  = -O3 -DNDEBUG -DCOMPLEX 
+FLAGS  = -O3 -DNDEBUG -DCOMPLEX
 
 
 $(NAME): main.o bessel.o $(HERMES)

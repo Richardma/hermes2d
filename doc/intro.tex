@@ -1,13 +1,13 @@
 
 Welcome to Hermes2D, a high-performance $hp$-FEM PDE solver library for a wide range
-of 2D problems. This manual describes how to install the library and apply it to 
-problems of electromagnetics, structural mechanics, fluid dynamics, and more. 
+of 2D problems. This manual describes how to install the library and apply it to
+problems of electromagnetics, structural mechanics, fluid dynamics, and more.
 
 The $hp$-FEM is a modern version of the Finite Element Method (FEM) which
 combines elements of variable diameter $h$ and polynomial degree $p$ to obtain
 extremely fast (exponential) convergence rates. Hermes2D implements quality $H^1$ and
 $\Hcurl$ conforming higher-order elements and contains novel algorithms
-that enable easy and modular construction of advanced, automatically-adaptive 
+that enable easy and modular construction of advanced, automatically-adaptive
 $hp$-FEM solvers.
 
 Hermes2D has the following features:
@@ -28,7 +28,7 @@ Hermes2D has the following features:
 
 Due to the broad range of problems to which it can be applied, Hermes2D was not
 designed as a~standalone program but rather as a library intended for the creation
-of more specialized solvers. For example, it is almost impossible to devise 
+of more specialized solvers. For example, it is almost impossible to devise
 a simple yet sufficiently general input file format fully covering all problem
 types mentioned above. Therefore, we expect that highly specialized front-ends to
 the library will be implemented in the future; see Figure~\ref{fig:frontends}.
@@ -46,7 +46,7 @@ the only way to use Hermes2D. Therefore, the library may not yet be for everyone
 its usage assumes at least a minimal knowledge of C or C++. On the other hand, the
 interface to Hermes2D is quite simple and easy to learn.
 
-As mentioned, Hermes2D is written in C++, you will therefore need a C++ compiler. The 
+As mentioned, Hermes2D is written in C++, you will therefore need a C++ compiler. The
 library can be compiled with the GNU compiler ({\tt gcc}) or the Intel compiler
 ({\tt icc}). The default linear solver is UMFPACK. See Chapter~\ref{ch:install} for
 installation instructions.

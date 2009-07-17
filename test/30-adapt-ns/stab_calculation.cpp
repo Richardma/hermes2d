@@ -3,7 +3,7 @@ void calculate_elements_length(double* ele_len, double* u_infty, Solution* u1, S
   Quad2D* quad = &g_quad_2d_std;
   u1->set_quad_2d(quad);
   u2->set_quad_2d(quad);
-  
+
   Solution tmp;
   tmp.set_zero(mesh);
 
@@ -11,7 +11,7 @@ void calculate_elements_length(double* ele_len, double* u_infty, Solution* u1, S
   Transformable* tr[3] = { &tmp, u1, u2 };
   Traverse trav;
   trav.begin(3, meshes, tr);
-  
+
   int ne = mesh->get_max_element_id() + 1;
   double* a = new double[ne];
   double* b = new double[ne];
@@ -20,7 +20,7 @@ void calculate_elements_length(double* ele_len, double* u_infty, Solution* u1, S
   memset(b, 0, sizeof(double) * ne);
   memset(n, 0, sizeof(int) * ne);
 
-  Element** ee; 
+  Element** ee;
   while ((ee = trav.get_next_state(NULL, NULL)) != NULL)
   {
     int o = u1->get_fn_order();
@@ -42,8 +42,8 @@ void calculate_elements_length(double* ele_len, double* u_infty, Solution* u1, S
   for_all_active_elements(e, mesh)
   {
     // averaged values of velocities on elements of mesh
-    double c = a[e->id] / n[e->id]; 
-    double d = b[e->id] / n[e->id]; 
+    double c = a[e->id] / n[e->id];
+    double d = b[e->id] / n[e->id];
     u_infty[e->id] = (fabs(c) > fabs(d)) ? fabs(c) : fabs(d);
 
     double den = (sqrt(sqr(c) + sqr(d)));
@@ -73,8 +73,8 @@ void calculate_stabilization_parameters(double* delta_K, double* tau_K, Solution
   int ne = mesh->get_max_element_id() + 1;
   double* ele_len = new double[ne];
   double* u_infty = new double[ne];
-  
-  calculate_elements_length(ele_len, u_infty, xsln, ysln, mesh); 
+
+  calculate_elements_length(ele_len, u_infty, xsln, ysln, mesh);
 
   Element* e;
   for_all_active_elements(e, mesh)

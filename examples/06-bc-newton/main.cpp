@@ -3,11 +3,11 @@
 
 // This example is a continuation of examples 03, 04 and 05. It explains
 // how to use Newton boundary conditions, and again it shows how a Filter
-// is used to visualize the solution gradient (which is infinite at the 
-// re-entrant corner again) 
+// is used to visualize the solution gradient (which is infinite at the
+// re-entrant corner again)
 //
-// PDE: Laplace equation -Laplace u = 0 (this equation describes, among 
-// many other things, also stationary heat transfer in a homogeneous linear 
+// PDE: Laplace equation -Laplace u = 0 (this equation describes, among
+// many other things, also stationary heat transfer in a homogeneous linear
 // material).
 //
 // BC: u = T1 ... fixed temperature on Gamma_3 (Dirichlet)
@@ -16,13 +16,13 @@
 //
 // (Note that the last BC can be written in the form  du/dn - H*u = -h*T0 )
 //
-// You can play with the parameters below: 
-// 
+// You can play with the parameters below:
+//
 
-double T1 = 30.0;            // prescribed temperature on Gamma_3 
+double T1 = 30.0;            // prescribed temperature on Gamma_3
 double T0 = 20.0;            // outer temperature on Gamma_1
 double H  = 0.05;            // heat flux on Gamma_1
-int P_INIT = 6;              // uniform polynomial degree in the mesh  
+int P_INIT = 6;              // uniform polynomial degree in the mesh
 int UNIFORM_REF_LEVEL = 2;   // number of initial uniform mesh refinements
 int CORNER_REF_LEVEL = 12;   // number of mesh refinements towards the re-entrant corner
 
@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
   // initialize the shapeset and the cache
   H1Shapeset shapeset;
   PrecalcShapeset pss(&shapeset);
-  
+
   // create an H1 space
   H1Space space(&mesh, &shapeset);
   space.set_bc_types(bc_types);
@@ -68,24 +68,24 @@ int main(int argc, char* argv[])
   wf.add_biform(0, 0, bilinear_form);
   wf.add_biform_surf(0, 0, bilinear_form_surf_Gamma_1, 1);
   wf.add_liform_surf(0, linear_form_surf_Gamma_1, 1);
-  
+
   // initialize the linear system and solver
   UmfpackSolver umfpack;
   LinSystem sys(&wf, &umfpack);
   sys.set_spaces(1, &space);
   sys.set_pss(1, &pss);
-  
+
   // assemble the stiffness matrix and solve the system
   Solution sln;
   sys.assemble();
   sys.solve(1, &sln);
-  
+
   // visualize the solution
   ScalarView view("Solution");
   view.show(&sln);
-  
+
   // compute and show gradient magnitude
-  // (note that the infinite gradient at the re-entrant 
+  // (note that the infinite gradient at the re-entrant
   // corner will be truncated for visualization purposes)
   ScalarView gradview("Gradient");
   MagFilter grad(&sln, &sln, FN_DX, FN_DY);

@@ -29,7 +29,7 @@
 
 
 static MToken simple_tokens[] =
-{ 
+{
   { MT_ERROR,   0, "???" }, //  0
   { MT_EOF,     0, "eof" }, //  1
   { MT_EQUAL,   0, "="   }, //  2
@@ -53,7 +53,7 @@ extern void serror(const char* msg, ...);
 
 %}
 %%
-  
+
 <<EOF>>     { return simple_tokens+1;  }
 \#.*$       { }
 \n          { mesh_lexer_line_num++; }
@@ -93,7 +93,7 @@ void mesh_lexer_init(FILE* f)
 }
 
 
-#if 0  // test code 
+#if 0  // test code
 int main()
 {
   MToken* t;

@@ -22,12 +22,12 @@ const double p_top = 1.52819;
 
 double zhlazeni1(double a, double b, double x)
 {
-  return 0.5 * (a+b) + 0.5 * (a-b) * (2.0 / M_PI) * atan(1000 * (1-x));  
+  return 0.5 * (a+b) + 0.5 * (a-b) * (2.0 / M_PI) * atan(1000 * (1-x));
 }
 
 double zhlazeni2(double a, double b, double x)
 {
-  return 0.5 * (a+b) + 0.5 * (b-a) * (2.0 / M_PI) * atan(1000 * (x));  
+  return 0.5 * (a+b) + 0.5 * (b-a) * (2.0 / M_PI) * atan(1000 * (x));
 }
 
 // BC for density
@@ -38,7 +38,7 @@ int dens_bc_types(int marker)
   else if (marker == 4) return BC_NATURAL;
 }
 
-scalar dens_bc_values(int marker, double x, double y) 
+scalar dens_bc_values(int marker, double x, double y)
 {
   //if (marker == 1) return rho_left;
   if (marker == 1) return zhlazeni1(rho_left, rho_top, y);
@@ -92,9 +92,9 @@ scalar energ_bc_values(int marker, double x, double y)
 {
 /*  if (marker == 1) return (p_left / (gam - 1)) + (rho_left *(v1_left*v1_left + v2_left*v2_left)) / 2;
   else if (marker == 2) return (p_top / (gam - 1)) + (rho_top *(v1_top*v1_top + v2_top*v2_top)) / 2;*/
-  if (marker == 1) return zhlazeni1((p_left / (gam - 1)) + (rho_left *(v1_left*v1_left + v2_left*v2_left)) / 2, 
+  if (marker == 1) return zhlazeni1((p_left / (gam - 1)) + (rho_left *(v1_left*v1_left + v2_left*v2_left)) / 2,
                                     (p_top / (gam - 1)) + (rho_top *(v1_top*v1_top + v2_top*v2_top)) / 2, y);
-  else if (marker == 2) return zhlazeni2((p_left / (gam - 1)) + (rho_left *(v1_left*v1_left + v2_left*v2_left)) / 2, 
+  else if (marker == 2) return zhlazeni2((p_left / (gam - 1)) + (rho_left *(v1_left*v1_left + v2_left*v2_left)) / 2,
                                          (p_top / (gam - 1)) + (rho_top *(v1_top*v1_top + v2_top*v2_top)) / 2, x);
 }
 
@@ -113,7 +113,7 @@ inline double int_w_dudx_v(RealFunction* w, RealFunction* fu, RealFunction* fv, 
   fu->set_quad_order(o);
   fv->set_quad_order(o, FN_VAL);
 
-  double *wval = w->get_fn_values();  
+  double *wval = w->get_fn_values();
   double *dudx = fu->get_dx_values();
   double *dudy = fu->get_dy_values();
   double *vval = fv->get_fn_values();
@@ -132,7 +132,7 @@ inline double int_w_dudy_v(RealFunction* w, RealFunction* fu, RealFunction* fv, 
   fu->set_quad_order(o);
   fv->set_quad_order(o, FN_VAL);
 
-  double *wval = w->get_fn_values();  
+  double *wval = w->get_fn_values();
   double *dudx = fu->get_dx_values();
   double *dudy = fu->get_dy_values();
   double *vval = fv->get_fn_values();
@@ -141,7 +141,7 @@ inline double int_w_dudy_v(RealFunction* w, RealFunction* fu, RealFunction* fv, 
   return result;
 }
 
-  
+
 //// bilinear and linear forms /////////////////////////////////////////////////////////////////////
 
 Solution u1prev, u2prev, u3prev, u4prev;
@@ -151,10 +151,10 @@ SimpleFilter *f20a, *f20b, *f21b, *f22b;
 SimpleFilter *f30a, *f30b, *f31a, *f31b, *f32b, *f33a, *f33b;
 
 // ROW 0
-scalar bilinear_form_0_0(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv) 
+scalar bilinear_form_0_0(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv)
   { return int_u_v(fu, fv, ru, rv) / tau; }
 
-scalar bilinear_form_0_1(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv) 
+scalar bilinear_form_0_1(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv)
   { return int_dudx_v(fu, fv, ru, rv); }
 
 scalar bilinear_form_0_2(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv)
@@ -172,12 +172,12 @@ scalar bilinear_form_1_2(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap*
 
 scalar bilinear_form_1_3(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv)
   { return (gam - 1) * int_dudx_v(fu, fv, ru, rv); }
-  
+
 // ROW 2
-scalar bilinear_form_2_0(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv) 
+scalar bilinear_form_2_0(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv)
   { return int_w_dudx_v(f20a, fu, fv, ru, rv) + int_w_dudy_v(f20b, fu, fv, ru, rv); }
 
-scalar bilinear_form_2_1(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv) 
+scalar bilinear_form_2_1(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv)
   { return int_w_dudx_v(f11b, fu, fv, ru, rv) + int_w_dudy_v(f21b, fu, fv, ru, rv); }
 
 scalar bilinear_form_2_2(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv)
@@ -185,7 +185,7 @@ scalar bilinear_form_2_2(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap*
 
 scalar bilinear_form_2_3(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv)
   { return (gam - 1) * int_dudy_v(fu, fv, ru, rv); }
-  
+
 // ROW 3
 scalar bilinear_form_3_0(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv)
   { return int_w_dudx_v(f30a, fu, fv, ru, rv) + int_w_dudy_v(f30b, fu, fv, ru, rv); }
@@ -196,13 +196,13 @@ scalar bilinear_form_3_1(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap*
 scalar bilinear_form_3_2(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv)
   { return int_w_dudx_v(f31b, fu, fv, ru, rv) + int_w_dudy_v(f32b, fu, fv, ru, rv); }
 
-scalar bilinear_form_3_3(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv) 
+scalar bilinear_form_3_3(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv)
   { return int_u_v(fu, fv, ru, rv) / tau + int_w_dudx_v(f33a, fu, fv, ru, rv) + int_w_dudy_v(f33b, fu, fv, ru, rv); }
 
-    
+
 //// linear forms //////////////////////////////////////////////////////////////////////////////////
 
-scalar linear_form_0(RealFunction* fv, RefMap* rv) 
+scalar linear_form_0(RealFunction* fv, RefMap* rv)
   { return int_u_v(&u1prev, fv, rv, rv) / tau; }
 
 scalar linear_form_1(RealFunction* fv, RefMap* rv)
@@ -220,16 +220,16 @@ scalar linear_form_3(RealFunction* fv, RefMap* rv)
 #define def_flt_2(name, var1, var2, exp) \
   void name(int n, scalar* var1, scalar* var2, scalar* rslt) \
     { for (int i = 0; i < n; i++) rslt[i] = exp; }
-    
+
 #define def_flt_3(name, var1, var2, var3, exp) \
   void name(int n, scalar* var1, scalar* var2, scalar* var3, scalar* rslt) \
     { for (int i = 0; i < n; i++) rslt[i] = exp; }
-    
+
 #define def_flt_4(name, var1, var2, var3, var4, exp) \
   void name(int n, scalar* var1, scalar* var2, scalar* var3, scalar* var4, scalar* rslt) \
     { for (int i = 0; i < n; i++) rslt[i] = exp; }
 
-    
+
 def_flt_3(fn10a, u1, u2, u3,  (gam - 1) * (0.5 *(sqr(u2[i]) + sqr(u3[i])) / sqr(u1[i])) - sqr(u2[i])/sqr(u1[i]));
 def_flt_3(fn10b, u1, u2, u3, -(u2[i] * u3[i]) / sqr(u1[i]));
 def_flt_2(fn11a, u1, u2,      (3 - gam) * u2[i] / u1[i]);
@@ -240,7 +240,7 @@ def_flt_2(fn12b, u1, u2,      u2[i] / u1[i]);
 def_flt_3(fn20a, u1, u2, u3, -(u2[i] * u3[i]) / sqr(u1[i]));
 def_flt_3(fn20b, u1, u2, u3,  (gam - 1) * (0.5 *(sqr(u2[i]) + sqr(u3[i])) / sqr(u1[i])) - sqr(u3[i])/sqr(u1[i]));
 def_flt_2(fn21b, u1, u2,      (1 - gam) * u2[i] / u1[i]);
-def_flt_2(fn22b, u1, u3,      (3 - gam) * u3[i] / u1[i]);    
+def_flt_2(fn22b, u1, u3,      (3 - gam) * u3[i] / u1[i]);
 
 def_flt_4(fn30a, u1, u2, u3, u4,  (u2[i] / u1[i]) * ((gam - 1) * ((sqr(u2[i]) + sqr(u3[i])) / sqr(u1[i])) - gam * u4[i]/u1[i]));
 def_flt_4(fn30b, u1, u2, u3, u4,  (u3[i] / u1[i]) * ((gam - 1) * ((sqr(u2[i]) + sqr(u3[i])) / sqr(u1[i])) - gam * u4[i]/u1[i]));
@@ -261,7 +261,7 @@ int criterion(Element* e)
     if (e->vn[i]->y < -0.554 * e->vn[i]->x + 0.9  ) region[i] = 1;
     else if (e->vn[i]->y <  0.435 * e->vn[i]->x - 0.886) region[i] = 3;
     else if ((e->vn[i]->y >  0.435 * e->vn[i]->x - 0.686) && (e->vn[i]->y > -0.554 * e->vn[i]->x + 1.1)) region[i] = 2;
-    else region[i] = 0;    
+    else region[i] = 0;
   }
   for(int i = 0; i < e->nvert; i++)
     if (region[i] == 0) return 0;
@@ -286,7 +286,7 @@ int main(int argc, char* argv[])
   //mesh.refine_all_elements();
   //mesh.refine_by_criterion(criterion, 3);
   //mesh.regularize(0);
-  
+
 
   H1ShapesetOrtho shapeset;
   PrecalcShapeset pss(&shapeset);
@@ -389,9 +389,9 @@ int main(int argc, char* argv[])
 
     // visualization
     dview.set_min_max_range(0.9,2.8);
-    dview.show(&u1prev); 
+    dview.show(&u1prev);
     //vview.show(&filter12b, &filter11b);
-    
+
     // assemble and solve
     dp.set_external_fns(21, &u1prev, &u2prev, &u3prev, &u4prev,
                             f10a = &filter10a,  f10b = &filter10b,

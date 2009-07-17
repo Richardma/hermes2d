@@ -18,7 +18,7 @@ int bc_types(int marker)
 
 
 double2 tau[7] = { { 0, 0 }, { -1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } };
-  
+
 complex bc_values(int marker, double x, double y)
 {
   // perfect conductor BC: E.tau = 0
@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
   mesh.load("lshape3.mesh");
   mesh.refine_towards_vertex(0, 5);
   mesh.refine_all_elements();
-  
+
   HcurlShapesetGradLeg shapeset;
   PrecalcShapeset pss(&shapeset);
 
@@ -105,9 +105,9 @@ int main(int argc, char* argv[])
   dp.create_matrix();
   dp.assemble_matrix_and_rhs();
   dp.solve_system(1, &sln);
-  
+
   sln.save("bessel.sln");
- 
+
   RealFilter real(&sln);
   ScalarView view1("X component", 100, 150, 1000, 900);
   view1.show(&real, EPS_NORMAL, FN_VAL_0);

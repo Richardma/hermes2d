@@ -64,7 +64,7 @@ static void exact_sol_val(double x, double y, scalar& e0, scalar& e1)
 static void exact_sol(double x, double y, scalar& e0, scalar& e1, scalar& e1dx, scalar& e0dy)
 {
   exact_sol_val(x,y,e0,e1);
-  
+
   double t1 = x*x;
   double t2 = y*y;
   double t3 = t1+t2;
@@ -121,7 +121,7 @@ int bc_types(int marker)
 
 // TODO: obtain tangent from EdgePos
 double2 tau[7] = { { 0, 0 }, { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 }, { 1, 0 }, { 0, 1 } };
-  
+
 complex bc_values(int marker, double x, double y)
 {
   if (marker == 1 || marker == 6) return 0;
@@ -170,7 +170,7 @@ int main(int argc, char* argv[])
 
   HcurlShapeset shapeset;
   PrecalcShapeset pss(&shapeset);
- 
+
   HcurlSpace space(&mesh, &shapeset);
   space.set_bc_types(bc_types);
   space.set_bc_values(bc_values);
@@ -180,7 +180,7 @@ int main(int argc, char* argv[])
   wf.add_biform(0, 0, bilinear_form, SYM);
   wf.add_biform_surf(0, 0, bilinear_form_surf);
   wf.add_liform_surf(0, linear_form_surf);
-  
+
   GnuplotGraph graph;
   graph.set_captions("Error Convergence for the Bessel Problem in H(curl)", "Degrees of Freedom", "Error [%]");
   graph.add_row("exact error", "k", "-", "o");
@@ -193,7 +193,7 @@ int main(int argc, char* argv[])
   graph_cpu.add_row("error estimate", "k", "--");
   graph_cpu.set_log_y();
 
-  OrderView  ord("Polynomial Orders", 800, 100, 700, 600); 
+  OrderView  ord("Polynomial Orders", 800, 100, 700, 600);
   VectorView vecview("Real part of Electric Field - VectorView", 0, 100, 700, 600);
 
   UmfpackSolver umfpack;
@@ -212,7 +212,7 @@ int main(int argc, char* argv[])
 
     begin_time();
     ord.show(&space);
-    
+
     // coarse problem
     LinSystem sys(&wf, &umfpack);
     sys.set_spaces(1, &space);
@@ -225,12 +225,12 @@ int main(int argc, char* argv[])
     // calculating error wrt. exact solution
     ExactSolution ex(&mesh, exact);
     double error = 100 * hcurl_error(&sln, &ex);
-    
+
     // show real part of the solution
     RealFilter real(&sln);
     vecview.set_min_max_range(0, 1);
     vecview.show(&real, EPS_HIGH);
-    
+
     // fine (reference) problem
     begin_time();
     RefSystem ref(&sys);
@@ -243,7 +243,7 @@ int main(int argc, char* argv[])
     info("Exact solution error: %g%%", error);
     info("Error estimate: %g%%", estim);
     if (estim < ERR_STOP || sys.get_num_dofs() >= NDOF_STOP) done=true;
-    
+
     // mesh adaptation
     hp.adapt(THRESHOLD, STRATEGY, H_ONLY);
 

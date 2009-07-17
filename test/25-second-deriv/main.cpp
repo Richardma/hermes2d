@@ -1,5 +1,5 @@
 // transformation of second derivatives in weak formulation
-// laplace equation on one element with nonconstant jacobian solved twice 
+// laplace equation on one element with nonconstant jacobian solved twice
 // - standard weak form    ( grad u , grad v ) = v
 // - using 2nd derivatives ( laplace u , v )   = v
 
@@ -11,7 +11,7 @@ inline double int_laplace_u_v(RealFunction* fu, RealFunction* fv, RefMap* ru, Re
 {
   Quad2D* quad = fu->get_quad_2d();
 
-  int o = fu->get_fn_order() + fv->get_fn_order() + ru->get_inv_ref_order(); 
+  int o = fu->get_fn_order() + fv->get_fn_order() + ru->get_inv_ref_order();
   limit_order(o);
 
   fu->set_quad_order(o, FN_ALL);
@@ -20,8 +20,8 @@ inline double int_laplace_u_v(RealFunction* fu, RealFunction* fv, RefMap* ru, Re
   double *vval = fv->get_fn_values();
   double *dudxx, *dudxy, *dudyy;
   dudxx = fu->get_dxx_values();
-  dudxy = fu->get_dxy_values();    
-  dudyy = fu->get_dyy_values();  
+  dudxy = fu->get_dxy_values();
+  dudyy = fu->get_dyy_values();
   double *dudx, *dudy;
   fu->get_dx_dy_values(dudx, dudy);
 
@@ -29,31 +29,31 @@ inline double int_laplace_u_v(RealFunction* fu, RealFunction* fv, RefMap* ru, Re
   double3* pt = quad->get_points(o);
   int np = quad->get_num_points(o);
   double2x2 *mu;
-  mu = ru->get_inv_ref_map(o); 
-  if (ru->is_jacobian_const()) 
+  mu = ru->get_inv_ref_map(o);
+  if (ru->is_jacobian_const())
   {
-    for (int i = 0; i < np; i++, mu++) 
+    for (int i = 0; i < np; i++, mu++)
     {
       double a = (sqr((*mu)[0][0]) + sqr((*mu)[1][0]));
       double b = (sqr((*mu)[0][1]) + sqr((*mu)[1][1]));
       double c = 2.0 * ((*mu)[0][0]*(*mu)[0][1] + (*mu)[1][0]*(*mu)[1][1]);
-      result += pt[i][2] * (dudxx[i]*a + dudxy[i]*c + dudyy[i]*b ) * vval[i]; 
+      result += pt[i][2] * (dudxx[i]*a + dudxy[i]*c + dudyy[i]*b ) * vval[i];
     }
     result *= ru->get_const_jacobian();
   }
   else
   {
     double3x2 *mm;
-    mm = ru->get_second_ref_map(o); 
-    double* jac = ru->get_jacobian(o); 
-    for (int i = 0; i < np; i++, mu++, mm++) 
+    mm = ru->get_second_ref_map(o);
+    double* jac = ru->get_jacobian(o);
+    for (int i = 0; i < np; i++, mu++, mm++)
     {
       double a = (sqr((*mu)[0][0]) + sqr((*mu)[1][0]));
       double b = (sqr((*mu)[0][1]) + sqr((*mu)[1][1]));
       double c = 2.0 * ((*mu)[0][0]*(*mu)[0][1] + (*mu)[1][0]*(*mu)[1][1]);
       double coefx = (*mm)[0][0] + (*mm)[2][0];
       double coefy = (*mm)[0][1] + (*mm)[2][1];
-      result += pt[i][2] * (jac[i]) * (dudx[i]*coefx + dudy[i]*coefy + dudxx[i]*a + dudxy[i]*c + dudyy[i]*b) * vval[i] ; 
+      result += pt[i][2] * (jac[i]) * (dudx[i]*coefx + dudy[i]*coefy + dudxx[i]*a + dudxy[i]*c + dudyy[i]*b) * vval[i] ;
     }
   }
 
@@ -70,16 +70,16 @@ inline double int_laplace_u_v(RealFunction* fu, RealFunction* fv, RefMap* ru, Re
       fu->pop_transform();
       ru->pop_transform();
       fv->pop_transform();
-    } 
-    
+    }
+
     if (fabs(sum - result) / fabs(sum) < 1e-3) return sum;
-    
+
     if (fv->get_ctm()->m[0] < 1.0 / 256.0)
     {
       warn("Adaptive quadrature: could not reach required accuracy.");
       return sum;
     }
-    
+
     sum = 0.0;
     for (int i = 0; i < 4; i++)
     {
@@ -91,10 +91,10 @@ inline double int_laplace_u_v(RealFunction* fu, RealFunction* fv, RefMap* ru, Re
       ru->pop_transform();
       fv->pop_transform();
     }
-    
+
     return sum;
   }
-  
+
   return result;
 }
 
@@ -147,7 +147,7 @@ int main(int argc, char* argv[])
 ////////////////////////////////////////////////
 
   mesh.load("square1.mesh");
-  
+
   Mesh mesh2;
   mesh2.load("square1.mesh");
   mesh2.refine_all_elements();

@@ -43,29 +43,29 @@ int main(int argc, char* argv[])
   mesh.refine_all_elements();*/
   mesh.refine_towards_vertex(0, 3);
   mesh.refine_element(7);
-  
+
   MeshView mv;
   mv.show(&mesh);
-  
+
   space.set_uniform_order(3);
   space.set_element_order(4, 5);
   space.set_element_order(6, 7);
   space.set_element_order(3, 2);
   space.assign_dofs();
- 
+
 
   int* parents = mesh.regularize(0);
   space.distribute_orders(&mesh, parents);
   free(parents);
-  
+
   space.assign_dofs();
-  
+
   OrderView ord;
   ord.show(&space);
-  
+
   sys.assemble();
   sys.solve(1, &sln);
- 
+
   ScalarView view1("Solution 1");
   view1.show(&sln);
   view1.wait_for_keypress();
@@ -75,7 +75,7 @@ int main(int argc, char* argv[])
   mesh.load("square2.mesh");
   mesh.refine_all_elements();
   mesh.refine_all_elements();
-  
+
   space.set_uniform_order(10);
   space.assign_dofs();
 
@@ -86,11 +86,11 @@ int main(int argc, char* argv[])
   view2.show(&sln);
 
   ////////////////////////
-  
+
   mesh.load("diamond.mesh");
   mesh.refine_all_elements(1);
   mesh.refine_all_elements(1);
-  
+
   space.set_uniform_order(10);
   space.assign_dofs();
 

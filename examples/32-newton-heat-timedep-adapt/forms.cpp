@@ -21,14 +21,14 @@ inline double F_euler(RealFunction* Tprev, RealFunction* Titer, RealFunction* fu
 
   // u is a test function
   double result = 0.0;
-  h1_integrate_dd_expression(( HEATCAP*(Titer_val[i] - Tprev_val[i])*uval[i]/TAU + 
+  h1_integrate_dd_expression(( HEATCAP*(Titer_val[i] - Tprev_val[i])*uval[i]/TAU +
                                lam(Titer_val[i]) * (dTiter_dx[i]*t_dudx + dTiter_dy[i]*t_dudy)));
 
   return result;
 }
 
 // Jacobian matrix for the implicit Euler time discretization
-inline double J_euler(RealFunction* Titer, RealFunction* fu, 
+inline double J_euler(RealFunction* Titer, RealFunction* fu,
                 RealFunction* fv, RefMap* ru, RefMap* rv)
 {
   Quad2D* quad = fu->get_quad_2d();
@@ -79,7 +79,7 @@ inline double F_cranic(RealFunction* Tprev, RealFunction* Titer, RealFunction* f
 
   // u is a test function
   double result = 0.0;
-  h1_integrate_dd_expression(( HEATCAP * (Titer_val[i] - Tprev_val[i]) * uval[i] / TAU + 
+  h1_integrate_dd_expression(( HEATCAP * (Titer_val[i] - Tprev_val[i]) * uval[i] / TAU +
                                0.5 * lam(Titer_val[i]) * (dTiter_dx[i]*t_dudx + dTiter_dy[i]*t_dudy) +
                                0.5 * lam(Tprev_val[i]) * (dTprev_dx[i]*t_dudx + dTprev_dy[i]*t_dudy)
                             ));
@@ -88,7 +88,7 @@ inline double F_cranic(RealFunction* Tprev, RealFunction* Titer, RealFunction* f
 }
 
 // Jacobian matrix for the Crank-Nicolson time discretization
-inline double J_cranic(RealFunction* Titer, RealFunction* fu, 
+inline double J_cranic(RealFunction* Titer, RealFunction* fu,
                 RealFunction* fv, RefMap* ru, RefMap* rv)
 {
   Quad2D* quad = fu->get_quad_2d();

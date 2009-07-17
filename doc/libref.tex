@@ -51,7 +51,7 @@ Name & Description \\
              & $\{ v1, v2, d, points, knots \}$. The first defines an $a$-degree \\
              & circular arc on the edge $(v_1, v_2)$. The latter defines a\\
              & NURBS curve, see below for details. \\
-\hline 
+\hline
 {\tt refinements} & List of integer pairs $\{ i, r \}$, where $i$ is a zero-based \\
                   & element number and $r$ is the type of refinement to be \\
                   & performed on the element after the mesh is loaded (0 --\\
@@ -67,12 +67,12 @@ are of degree 1, circles have degree 2 and free-form curves are of degree 3 or 5
 
 The control points $p_i,\; i = 0 \dots n$, are the main tool for changing the shape of
 the curve. A curve of degree $d$ must have at least $d+1$ control points. In Hermes2D,
-the endpoints of the edge are always assumed to be the first and last control points 
+the endpoints of the edge are always assumed to be the first and last control points
 and therefore only the inner control points are listed in the mesh file.
 All control points have an associated weight $w_i \geq 0$ which influences
 the shape of the curve near the corresponding control point.
 If $w_i = 0$ then $p_i$ has no effect on the shape.
-As $w_i$ increases, the curve is pulled towards $p_i$. In the above definition of 
+As $w_i$ increases, the curve is pulled towards $p_i$. In the above definition of
 the variable {\tt curves}, $points$ is a list of real-valued triples.
 
 The knot vector is a sequence of $m+1$ values that determines how much and where the
@@ -80,7 +80,7 @@ control points influence the shape. The relation $m = n+d+1$ must hold. The sequ
 nondecreasing, $t_i \leq t_{i+1}$, and divides the whole interval $[0,1]$ into smaller
 intervals which determine the area of influence of the control points. Since the curve
 has to start and end at the edge vertices, the knot vector in Hermes2D always starts
-with $d+1$ zeros and ends with $d+1$ ones. Only the inner knots are listed in the 
+with $d+1$ zeros and ends with $d+1$ ones. Only the inner knots are listed in the
 above definition of the variable {\tt curves}, where $knots$ is a simple list of real values.
 
 \label{sec:nurbs}
@@ -101,14 +101,14 @@ above definition of the variable {\tt curves}, where $knots$ is a simple list of
 
 The {\tt Mesh} class represents an irregular, hybrid, curvilinear finite element mesh.
 The class contains methods and algoriths to load, save and refine the mesh. Please
-note that the class stores geometrical information only. All FEM-related information, 
+note that the class stores geometrical information only. All FEM-related information,
 such as element polynomial orders, are stored in the {\tt Space} class, described in
 the next section.
 
 \medskip
 \begin{lstlisting}
 void Mesh::load(const char* filename);
-\end{lstlisting} 
+\end{lstlisting}
 \desc{Loads the mesh from a text file whose format is given in Section \ref{meshformat}.
 Aborts the program on error.}
 
@@ -145,7 +145,7 @@ elements (those that participate in the computation).}
 \begin{lstlisting}
  void Mesh::refine_element(int id, int refinement = 0);
 \end{lstlisting}
-\desc{Refines an element: {\tt id} is the zero-based number of the element. 
+\desc{Refines an element: {\tt id} is the zero-based number of the element.
 {\tt refinement} is ignored for triangles, but if the element is a quad, 0 means
 refine in both directions, 1 means refine horizontally (with respect to the reference
 domain) and 2 means refine vertically.}

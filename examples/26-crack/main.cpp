@@ -3,29 +3,29 @@
 
 // This example employs the multimesh adaptive hp-FEM for a simple
 // problem of crack mechanics. Each displacement components is
-// approximated using an individual mesh. 
+// approximated using an individual mesh.
 //
 // PDE: Lame equations of linear elasticity
 //
 // BC: u_1 = u_2 = 0 on Gamma_1 (left edge)
 //     du_2/dn = f on Gamma_2 (upper edge)
-//     du_1/dn = du_2/dn = 0 elsewhere, including two horizontal 
+//     du_1/dn = du_2/dn = 0 elsewhere, including two horizontal
 //               cracks inside the domain. The width of the cracks
 //               is currently zero, it can be set in the mesh file
 //               via the parameter 'w'.
-//     
-// The following parameters can be played with:  
+//
+// The following parameters can be played with:
 
 const bool MULTI = true;             // true = use multi-mesh, false = use single-mesh
                                      // Note: in the single mesh option, the meshes are
-                                     // forced to be geometrically the same but the 
-                                     // polynomial degrees can still vary 
-const bool SAME_ORDERS = true;       // true = when single mesh is used it forces same pol. 
+                                     // forced to be geometrically the same but the
+                                     // polynomial degrees can still vary
+const bool SAME_ORDERS = true;       // true = when single mesh is used it forces same pol.
                                      // orders for components
                                      // when multi mesh used, parameter is ignored
 const int P_INIT = 1;                // initial polynomial degree in mesh
 const bool H_ONLY = false;           // if H_ONLY == false then full hp-adaptivity takes place, otherwise
-                                     // h-adaptivity is used. Use this parameter to check that indeed adaptive 
+                                     // h-adaptivity is used. Use this parameter to check that indeed adaptive
                                      // hp-FEM converges much faster than adaptive h-FEM
 const int STRATEGY = 0;              // refinement strategy (0, 1, 2, 3 - see adapt_h1.cpp for explanation)
 const double THRESHOLD_MULTI = 0.35; // error threshold for element refinement (multi-mesh)
@@ -38,11 +38,11 @@ const bool ISO_ONLY = false;         // when ISO_ONLY = true, only isometric ref
                                      // otherwise anisotropic refinements can be taken into account
 const int MAX_ORDER = 10;            // maximal order used during adaptivity
 const double ERR_STOP = 1e-2;        // stopping criterion for hp-adaptivity
-                                     // (rel. error tolerance between the reference 
+                                     // (rel. error tolerance between the reference
                                      // and coarse solution in percent)
-const int NDOF_STOP = 40000;         // adaptivity process stops when the number of 
-                                     // degrees of freedom grows over this limit. This is 
-                                     // mainly to prevent h-adaptivity to go on forever.  
+const int NDOF_STOP = 40000;         // adaptivity process stops when the number of
+                                     // degrees of freedom grows over this limit. This is
+                                     // mainly to prevent h-adaptivity to go on forever.
 // other equation parameters
 const double E  = 200e9;  // Young modulus for steel: 200 GPa
 const double nu = 0.3;    // Poisson ratio
@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
   // load the mesh file
   Mesh xmesh, ymesh;
   xmesh.load("crack-2.mesh");
-  ymesh.copy(&xmesh);          // this defines the common master mesh for 
+  ymesh.copy(&xmesh);          // this defines the common master mesh for
                                // both displacement fields
 
   // initialize the shapeset and the cache
@@ -101,7 +101,7 @@ int main(int argc, char* argv[])
   wf.add_biform(0, 1, bilinear_form_0_1, SYM);
   wf.add_biform(1, 1, bilinear_form_1_1, SYM);
   wf.add_liform_surf(1, linear_form_1_surf_top, marker_top);
-  
+
   ScalarView sview("Von Mises stress [Pa]", 0, 300, 800, 800);
   OrderView  xoview("X polynomial orders", 0, 0, 800, 800);
   OrderView  yoview("Y polynomial orders", 810, 0, 800, 800);
@@ -121,7 +121,7 @@ int main(int argc, char* argv[])
   UmfpackSolver umfpack;
 
   char filename[200];
-  
+
   int it = 1, ndofs;
   bool done = false;
   double cpu = 0.0;
@@ -130,12 +130,12 @@ int main(int argc, char* argv[])
 
     info("\n---- Iteration %d ---------------------------------------------\n", it++);
     begin_time();
-	  
+
     //calculating the number of degrees of freedom
     ndofs = xdisp.assign_dofs();
     ndofs += ydisp.assign_dofs(ndofs);
     printf("xdof=%d, ydof=%d\n", xdisp.get_num_dofs(), ydisp.get_num_dofs());
-	  
+
     // solve the coarse problem
     LinSystem ls(&wf, &umfpack);
     ls.set_spaces(2, &xdisp, &ydisp);
@@ -149,15 +149,15 @@ int main(int argc, char* argv[])
     sview.show(&stress, EPS_HIGH);
     xoview.show(&xdisp);
     yoview.show(&ydisp);
-  
+
     // solve the fine (reference) problem
     RefSystem rs(&ls);
     rs.assemble();
     rs.solve(2, &xrsln, &yrsln);
-    
+
     // estimate errors and adapt the solution
     H1OrthoHP hp(2, &xdisp, &ydisp);
-    double err_est = hp.calc_energy_error_2(&xsln, &ysln, &xrsln, &yrsln, 
+    double err_est = hp.calc_energy_error_2(&xsln, &ysln, &xrsln, &yrsln,
                                           bilinear_form_0_0, bilinear_form_0_1,
                                           bilinear_form_1_0, bilinear_form_1_1) * 100;
     if (err_est < ERR_STOP || xdisp.get_num_dofs() + ydisp.get_num_dofs() >= NDOF_STOP) done = true;
@@ -170,10 +170,10 @@ int main(int argc, char* argv[])
     graph_cpu.add_values(0, cpu, err_est);
     graph_cpu.save(MULTI ? "conv_cpu_m.gp" : "conv_cpu_s.gp");
     info("Error estimate: %g \%", err_est);
-   
+
   }
   while (!done);
-  
+
   verbose("Total CPU time: %g sec", cpu);
 
   // wait for keypress or mouse input

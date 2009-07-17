@@ -1,5 +1,5 @@
-# Anjuta Version 1.2.4a 
-Compatibility Level: 1 
+# Anjuta Version 1.2.4a
+Compatibility Level: 1
 
 <PROJECT_DESCRIPTION_START>
 Some description<PROJECT_DESCRIPTION_END>
@@ -39,7 +39,7 @@ project.excluded.modules=intl
 project.config.extra.modules.before=
 project.config.extra.modules.after=
 project.config.blocked=1
-project.config.disable.overwriting=1 1 1 1 1 1 1 1 1 
+project.config.disable.overwriting=1 1 1 1 1 1 1 1 1
 
 project.menu.entry=hermes2d Version 0.99
 project.menu.group=Application
@@ -52,7 +52,7 @@ anjuta.program.arguments=
 preferences.build.option.jobs=0
 preferences.build.option.silent=0
 preferences.build.option.autosave=1
-preferences.make=make -j 4 
+preferences.make=make -j 4
 preferences.build.option.keep.going=1
 preferences.build.option.warn.undef=0
 preferences.autoformat.custom.style= -i8 -sc -bli0 -bl0 -cbi0 -ss
@@ -196,9 +196,9 @@ compiler.options.libraries.selected=
 compiler.options.defines=\
 	HAVE_CONFIG_H
 compiler.options.defines.selected=
-compiler.options.warning.buttons=0 0 1 1 0 1 0 0 0 0 0 0 0 1 0 0 
-compiler.options.optimize.buttons=0 0 1 0 
-compiler.options.other.buttons=1 0 
+compiler.options.warning.buttons=0 0 1 1 0 1 0 0 0 0 0 0 0 1 0 0
+compiler.options.optimize.buttons=0 0 1 0
+compiler.options.other.buttons=1 0
 compiler.options.other.c.flags=
 compiler.options.other.l.flags=
 compiler.options.other.l.libs=

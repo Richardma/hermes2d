@@ -1,8 +1,8 @@
 #include "hermes2d.h"
 #include "solver_umfpack.h"  // defines the class UmfpackSolver
 
-// This example shows how to solve a simple PDE using Hermes: 
-//   - load the mesh, 
+// This example shows how to solve a simple PDE using Hermes:
+//   - load the mesh,
 //   - perform initial refinements
 //   - create a H1 space over the mesh
 //   - define weak formulation
@@ -11,10 +11,10 @@
 //   - visualize the solution
 //
 // PDE: Poisson equation -Laplace u = CONST_F with homogeneous (zero)
-//      Dirichlet boundary conditions. 
+//      Dirichlet boundary conditions.
 //
-// Below you can change the constant right-hand side CONST_F, the 
-// initial polynomial degree P_INIT, and play with various initial 
+// Below you can change the constant right-hand side CONST_F, the
+// initial polynomial degree P_INIT, and play with various initial
 // mesh refinements at the beginning of the main() function
 
 double CONST_F = 2.0;   // constant right-hand side
@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
   // initialize the shapeset and the cache
   H1Shapeset shapeset;
   PrecalcShapeset pss(&shapeset);
-  
+
   // create an H1 space
   H1Space space(&mesh, &shapeset);
   space.set_uniform_order(P_INIT);
@@ -62,7 +62,7 @@ int main(int argc, char* argv[])
   LinSystem sys(&wf, &umfpack);
   sys.set_spaces(1, &space);
   sys.set_pss(1, &pss);
-  
+
   // assemble the stiffness matrix and solve the system
   Solution sln;
   sys.assemble();
@@ -71,7 +71,7 @@ int main(int argc, char* argv[])
   // visualize the solution
   ScalarView view("Solution");
   view.show(&sln);
-  
+
   // wait for keyboard or mouse input
   printf("Click into the image window and press 'q' to finish.\n");
   View::wait();

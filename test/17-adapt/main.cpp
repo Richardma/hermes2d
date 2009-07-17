@@ -17,7 +17,7 @@ static double fndd(double x, double y, double& dx, double& dy)
 
 
 double bc_values(int marker, double x, double y)
-{  
+{
   return fn(x, y);
 }
 
@@ -88,19 +88,19 @@ int main(int argc, char* argv[])
     dp.assemble_matrix_and_rhs();
 
     Solution sln;
-    dp.solve_system(1, &sln);    
+    dp.solve_system(1, &sln);
 
     double error = 100 * h1_error_norm_exact(&sln, fndd);
     info("\nExact solution error: %g%%", error);
     graph.add_values(0, space.get_num_dofs(), error);
-    
+
     view.show(&sln);
     ord.show(&space);
 
     double2 energy2[1];
     cont = adapt_energy(&dp, 0.1, energy2);
     graph.add_values(2, space.get_num_dofs(), sqrt(energy2[0][0] / energy2[0][1]) * 100);
-    
+
     graph.save("conv.m");
   }
   while (cont);

@@ -18,21 +18,21 @@ int yvel_bc_type(int marker)
 int press_bc_type(int marker)
   { return BC_NONE; }
 
-  
+
 
 int main(int argc, char* argv[])
 {
   hermes2d_initialize(&argc, argv);
-  
+
   Mesh mesh;
   mesh.load("airfoil.mesh");
-  
+
   MeshView mv;
   mv.show(&mesh);
-  
+
   H1ShapesetOrtho shapeset;
   PrecalcShapeset pss(&shapeset);
-    
+
   // H1 spaces for velocities and pressure
   H1Space xvel(&mesh, &shapeset);
   H1Space yvel(&mesh, &shapeset);
@@ -61,11 +61,11 @@ int main(int argc, char* argv[])
   FILE* f = fopen("sln200.dat", "rb");
   fread(vec, sizeof(double), ndofs+1, f);
   fclose(f);
-  
+
   Solution xsln, ysln;
   xsln.set_space_and_pss(&xvel, &pss);
   ysln.set_space_and_pss(&yvel, &pss);
-  xsln.set_solution_vector(vec, true);  
+  xsln.set_solution_vector(vec, true);
   ysln.set_solution_vector(vec, false);
 
   ScalarView view1("Scalar1", 200, 150, 1100, 800);
@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
   view2.show(&ysln);
   VectorView vview("Vector", 200, 150, 1100, 800);
   vview.show(&xsln, &ysln);
-    
+
   hermes2d_finalize();
   return 0;
 }

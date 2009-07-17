@@ -25,23 +25,23 @@
 #include <stdlib.h>
 #include "weakform_lexer.h"
 
-    
+
 // modification of the declaration of yylex()
 #define YY_DECL Token* wf_get_token()
-  
-  
+
+
 const char* input_text;
-  
-// modification of the scanner input 
+
+// modification of the scanner input
 #define YY_INPUT(buf,result,max_size) \
   { \
     int c = *input_text++; \
     result = !c ? YY_NULL : (buf[0] = c, 1); \
   }
 
-  
+
 static Token simple_tokens[] =
-{ 
+{
   { T_ERROR, 0, "???",  NULL }, //  0
   { T_EOF,   0, "eof",  NULL }, //  1
   { T_VOL,   0, "vol",  NULL }, //  2
@@ -119,7 +119,7 @@ static Token* find_symbol(char* name)
 %{
   Token* t;
 %}
-  
+
 <<EOF>>     { return simple_tokens+1;  }
 [ \t\r\n]   { }
 "vol"       { return simple_tokens+2;  }
@@ -176,7 +176,7 @@ void wf_lexer_free()
 }
 
 
-#if 0 // test code 
+#if 0 // test code
 int main()
 {
   Token* t;

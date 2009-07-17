@@ -62,12 +62,12 @@ Solution xprev, yprev;
 double *delta_K, *tau_K;
 
 scalar bilinear_form_0_0_1_1_sym(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv)
-  { return int_grad_u_grad_v(fu, fv, ru, rv) / Re +  
+  { return int_grad_u_grad_v(fu, fv, ru, rv) / Re +
            int_u_v(fu, fv, ru, rv) / tau; }
 
 scalar bilinear_form_0_0_1_1_unsym(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv)
   { return int_w_nabla_u_v(&xprev, &yprev, fu, fv, ru, rv); }
-           
+
 scalar bilinear_form_0_2(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv)
   { return -int_u_dvdx(fu, fv, ru, rv); }
 
@@ -85,50 +85,50 @@ scalar linear_form_1(RealFunction* fv, RefMap* rv)
 #include "integrals_stab.cpp"
 
 scalar bilinear_form_stab_0_0_1_1(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv)
-{ 
-    double param = delta_K[ru->get_active_element()->id]; 
+{
+    double param = delta_K[ru->get_active_element()->id];
     return param * int_stab_0_0(&xprev, &yprev, fu, fv, ru, rv);
 }
 
 scalar bilinear_form_stab_0_0(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv)
-  { 
+  {
     double param = tau_K[ru->get_active_element()->id];
-    return param * int_dudx_dvdx(fu, fv, ru, rv); 
+    return param * int_dudx_dvdx(fu, fv, ru, rv);
   }
 
 scalar bilinear_form_stab_0_1(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv)
-  { 
+  {
     double param = tau_K[ru->get_active_element()->id];
-    return param * int_dudx_dvdy(fv, fu, rv, ru); 
+    return param * int_dudx_dvdy(fv, fu, rv, ru);
   }
 
 scalar bilinear_form_stab_1_1(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv)
-  { 
+  {
     double param = tau_K[ru->get_active_element()->id];
-    return param * int_dudy_dvdy(fu, fv, ru, rv); 
+    return param * int_dudy_dvdy(fu, fv, ru, rv);
   }
 
 scalar bilinear_form_stab_0_2(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv)
-  { 
+  {
      double param = delta_K[ru->get_active_element()->id];
-     return param * int_dudx_w_nabla_v(&xprev, &yprev, fu, fv, ru, rv); 
+     return param * int_dudx_w_nabla_v(&xprev, &yprev, fu, fv, ru, rv);
   }
 
 scalar bilinear_form_stab_1_2(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv)
-  { 
+  {
      double param = delta_K[ru->get_active_element()->id];
-     return param * int_dudy_w_nabla_v(&xprev, &yprev, fu, fv, ru, rv); 
+     return param * int_dudy_w_nabla_v(&xprev, &yprev, fu, fv, ru, rv);
   }
 
 scalar linear_form_stab_0(RealFunction* fv, RefMap* rv)
-  { 
+  {
      RefMap* refmap = xprev.get_refmap();
      double param = delta_K[rv->get_active_element()->id];
-     return param * int_w_nabla_u_v(&xprev, &yprev, fv, &xprev, rv, refmap) / tau;  
+     return param * int_w_nabla_u_v(&xprev, &yprev, fv, &xprev, rv, refmap) / tau;
   }
 
 scalar linear_form_stab_1(RealFunction* fv, RefMap* rv)
-  { 
+  {
      RefMap* refmap = yprev.get_refmap();
      double param = delta_K[rv->get_active_element()->id];
      return param * int_w_nabla_u_v(&xprev, &yprev, fv, &yprev, rv, refmap) / tau;
@@ -143,10 +143,10 @@ scalar linear_form_stab_1(RealFunction* fv, RefMap* rv)
 
 static double* cmp_err;
 static int compare(const void* p1, const void* p2)
-{ 
+{
   const int (*e1) = ((const int*) p1);
   const int (*e2) = ((const int*) p2);
-  return cmp_err[(*e1)] < cmp_err[(*e2)] ? 1 : -1; 
+  return cmp_err[(*e1)] < cmp_err[(*e2)] ? 1 : -1;
 }
 
 
@@ -162,11 +162,11 @@ double calc_error(MeshFunction* sln, MeshFunction* rsln, int*& esort, double*& e
 
   Mesh* cmesh = sln->get_mesh();
   Mesh* fmesh = rsln->get_mesh();
-    
+
   int max = cmesh->get_max_element_id();
   errors = new double[max];
   memset(errors, 0, sizeof(double) * max);
-    
+
   Element* e;
   for_all_active_elements(e, cmesh)
   {
@@ -192,22 +192,22 @@ double calc_error(MeshFunction* sln, MeshFunction* rsln, int*& esort, double*& e
       {
         sln->push_transform(i);
         rsln->set_active_element(fe->sons[i]);
-  
+
         RefMap* crm = sln->get_refmap();
         RefMap* frm = rsln->get_refmap();
-  
+
         double err  = int_l2_error(sln, rsln, crm, frm);
         total_norm += int_l2_norm (rsln, frm);
-  
+
         errors[e->id] += err;
         total_error += err;
-  
+
         sln->pop_transform();
       }
-    }       
+    }
     esort[k++] = e->id;
   }
-  
+
   for_all_inactive_elements(e, cmesh)
     errors[e->id] = -1.0;
 
@@ -216,7 +216,7 @@ double calc_error(MeshFunction* sln, MeshFunction* rsln, int*& esort, double*& e
 
   cmp_err = errors;
   qsort(esort, nact, sizeof(int), compare);
-    
+
   return sqrt(total_error / total_norm);
 }
 
@@ -247,12 +247,12 @@ void adapt_solution(bool& done, double to_be_processed, Mesh* mesh, Mesh* cmesh,
     {
       int id = esort[i];
       double err = errors[id];
-  
+
       if (err < thr * errors[esort[0]]) { break; }
       if ( (processed_error > coef * to_be_processed) && fabs((err - err0)/err0) > 1e-3 ) { info("Processed error condition."); break; }
       err0 = err;
       processed_error += err;
-  
+
       Element* e;
       e = mesh->get_element(id);
       mesh->refine_element(id);
@@ -293,7 +293,7 @@ int main(int argc, char* argv[])
   Mesh mesh, basemesh;
   basemesh.load(mesh_file);
   mesh.copy(&basemesh);
-  
+
   H1Shapeset shapeset;
   PrecalcShapeset pss(&shapeset);
 
@@ -319,7 +319,7 @@ int main(int argc, char* argv[])
     wf.add_liform(0, linear_form_stab_0, ANY, 2, &xprev, &yprev);
     wf.add_liform(1, linear_form_stab_1, ANY, 2, &xprev, &yprev);
   }
-  
+
   H1Space xvel(&mesh, &shapeset);
   H1Space yvel(&mesh, &shapeset);
   H1Space press(&mesh, &shapeset);
@@ -366,7 +366,7 @@ int main(int argc, char* argv[])
       int ndofs = 0;
       ndofs += xvel.assign_dofs(ndofs);
       ndofs += yvel.assign_dofs(ndofs);
-      ndofs += press.assign_dofs(ndofs);  
+      ndofs += press.assign_dofs(ndofs);
       if (stab) {
         int ne = mesh.get_max_element_id() + 1;
         delta_K = new double[ne];  tau_K = new double[ne];
@@ -379,7 +379,7 @@ int main(int argc, char* argv[])
       sys.assemble();
       sys.solve(3, &xsln, &ysln, &psln);
       if (stab) { delete [] delta_K;   delete [] tau_K; }
-      
+
      // visualization
       magview.show(&xsln, &ysln, EPS_LOW);
       pressview.show(&psln);
@@ -403,10 +403,10 @@ int main(int argc, char* argv[])
       int    *crs_esort,  *sln_esort;
 
       double sln_err = 100 * calc_error(&sln_vel, &ref_vel, sln_esort, sln_errors);
-      if (sln_err < delta) done = true;   
-      info("Error %g%%", sln_err);    
+      if (sln_err < delta) done = true;
+      info("Error %g%%", sln_err);
 
-      if (done) 
+      if (done)
       {
         // solve super-coarse problem
         if (stab) {
@@ -429,7 +429,7 @@ int main(int argc, char* argv[])
       xvel.set_uniform_order(init_order_x);
       yvel.set_uniform_order(init_order_y);
       press.set_uniform_order(init_order_p);
-                  
+
     }
     while(!done);
 
@@ -439,8 +439,8 @@ int main(int argc, char* argv[])
     yprev = yref;
 
   }
-  
-  
+
+
   View::wait();
   return 0;
 }

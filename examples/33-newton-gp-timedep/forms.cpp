@@ -22,13 +22,13 @@ inline complex F_euler(ScalarFunction* Psi_prev, ScalarFunction* Psi_iter, RealF
   fu->get_dx_dy_values(dudx, dudy);
 
   // obtain physical coordinates of int. points
-  double* x = ru->get_phys_x(o);  
-  double* y = ru->get_phys_y(o);  
+  double* x = ru->get_phys_x(o);
+  double* y = ru->get_phys_y(o);
 
   // u is a test function
   scalar result = complex(0.0, 0.0);
-  h1_integrate_dd_expression(( 
-    ii * H * (Psi_iter_val[i] - Psi_prev_val[i]) * uval[i] / TAU 
+  h1_integrate_dd_expression((
+    ii * H * (Psi_iter_val[i] - Psi_prev_val[i]) * uval[i] / TAU
     - H*H/(2*M) * (dPsi_iter_dx[i]*t_dudx + dPsi_iter_dy[i]*t_dudy)
     - G * Psi_iter_val[i] *  Psi_iter_val[i] * conj(Psi_iter_val[i]) * uval[i]
     - .5*M*OMEGA*OMEGA * (x[i]*x[i] + y[i]*y[i]) * Psi_iter_val[i] * uval[i]
@@ -38,7 +38,7 @@ inline complex F_euler(ScalarFunction* Psi_prev, ScalarFunction* Psi_iter, RealF
 }
 
 // Jacobian matrix for the implicit Euler time discretization
-inline complex J_euler(ScalarFunction* Psi_iter, RealFunction* fu, 
+inline complex J_euler(ScalarFunction* Psi_iter, RealFunction* fu,
                 RealFunction* fv, RefMap* ru, RefMap* rv)
 {
   scalar ii = complex(0.0, 1.0);  // imaginary unit, ii^2 = -1
@@ -61,13 +61,13 @@ inline complex J_euler(ScalarFunction* Psi_iter, RealFunction* fu,
   fv->get_dx_dy_values(dvdx, dvdy);
 
   // obtain physical coordinates of int. points
-  double* x = ru->get_phys_x(o);  
-  double* y = ru->get_phys_y(o);  
+  double* x = ru->get_phys_x(o);
+  double* y = ru->get_phys_y(o);
 
   // u is a basis function, v a test function
   scalar result = complex(0.0, 0.0);
-  h1_integrate_dd_expression(( 
-    ii * H * uval[i] * vval[i] / TAU 
+  h1_integrate_dd_expression((
+    ii * H * uval[i] * vval[i] / TAU
     - H*H/(2*M) * (t_dudx*t_dvdx + t_dudy*t_dvdy)
     - 2* G * uval[i] *  Psi_iter_val[i] * conj(Psi_iter_val[i]) * vval[i]
     - G * Psi_iter_val[i] *  Psi_iter_val[i] * uval[i] * vval[i]
@@ -103,13 +103,13 @@ inline complex F_cranic(ScalarFunction* Psi_prev, ScalarFunction* Psi_iter, Real
   fu->get_dx_dy_values(dudx, dudy);
 
   // obtain physical coordinates of int. points
-  double* x = ru->get_phys_x(o);  
-  double* y = ru->get_phys_y(o);  
+  double* x = ru->get_phys_x(o);
+  double* y = ru->get_phys_y(o);
 
   // u is a test function
   scalar result = complex(0.0, 0.0);
-  h1_integrate_dd_expression(( 
-    ii * H * (Psi_iter_val[i] - Psi_prev_val[i]) * uval[i] / TAU 
+  h1_integrate_dd_expression((
+    ii * H * (Psi_iter_val[i] - Psi_prev_val[i]) * uval[i] / TAU
     - 0.5*H*H/(2*M) * (dPsi_iter_dx[i]*t_dudx + dPsi_iter_dy[i]*t_dudy)
     - 0.5*H*H/(2*M) * (dPsi_prev_dx[i]*t_dudx + dPsi_prev_dy[i]*t_dudy)
     - 0.5*G * Psi_iter_val[i] *  Psi_iter_val[i] * conj(Psi_iter_val[i]) * uval[i]
@@ -121,7 +121,7 @@ inline complex F_cranic(ScalarFunction* Psi_prev, ScalarFunction* Psi_iter, Real
 }
 
 // Jacobian matrix for the Crank-Nicolson time discretization
-inline complex J_cranic(ScalarFunction* Psi_iter, RealFunction* fu, 
+inline complex J_cranic(ScalarFunction* Psi_iter, RealFunction* fu,
                 RealFunction* fv, RefMap* ru, RefMap* rv)
 {
   scalar ii = complex(0.0, 1.0);  // imaginary unit, ii^2 = -1
@@ -144,13 +144,13 @@ inline complex J_cranic(ScalarFunction* Psi_iter, RealFunction* fu,
   fv->get_dx_dy_values(dvdx, dvdy);
 
   // obtain physical coordinates of int. points
-  double* x = ru->get_phys_x(o);  
-  double* y = ru->get_phys_y(o);  
+  double* x = ru->get_phys_x(o);
+  double* y = ru->get_phys_y(o);
 
   // u is a basis function, v a test function
   scalar result = complex(0.0, 0.0);
-  h1_integrate_dd_expression(( 
-    ii * H * uval[i] * vval[i] / TAU 
+  h1_integrate_dd_expression((
+    ii * H * uval[i] * vval[i] / TAU
     - 0.5*H*H/(2*M) * (t_dudx*t_dvdx + t_dudy*t_dvdy)
     - 0.5*2.0* G * uval[i] *  Psi_iter_val[i] * conj(Psi_iter_val[i]) * vval[i]
     - 0.5*G * Psi_iter_val[i] *  Psi_iter_val[i] * uval[i] * vval[i]

@@ -31,7 +31,7 @@ inline double int_u3_v(RealFunction* fu, RealFunction* vi, RefMap* ru, RefMap* r
 
   double* uval = fu->get_fn_values();
   double* vval = vi->get_fn_values();
-  
+
   h1_integrate_expression(uval[i]*uval[i]*uval[i]*vval[i]);
   return result;
 }
@@ -47,7 +47,7 @@ inline double int_u2_vj_vi(RealFunction* fu, RealFunction* vj, RealFunction* vi,
   fu->set_quad_order(o);
   vj->set_quad_order(o);
   vi->set_quad_order(o);
-  
+
   double* uval = fu->get_fn_values();
   double* jval = vj->get_fn_values();
   double* ival = vi->get_fn_values();

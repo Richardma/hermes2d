@@ -6,7 +6,7 @@
 
 
 \newcommand{\info}[2]{
-  \vspace{-4.5mm} 
+  \vspace{-4.5mm}
   \begin{tabbing}
   \hspace{9mm} \= Calculates:\quad \= {#1} \\[1.5mm]
                 \> Purpose:         \> {#2}
@@ -14,7 +14,7 @@
   \smallskip
 }
 \newcommand{\infov}[3]{
-  \vspace{-4.5mm} 
+  \vspace{-4.5mm}
   \begin{tabbing}
   \hspace{9mm} \= Calculates:\quad \= {#1} \\[1.5mm]
                 \> Purpose:         \> {#2} \\[1mm]
@@ -64,7 +64,7 @@ double int_x_v(RealFunction* fv, RefMap* rv)
 \infov{$\volint x\,v \dx$}
       {general; cylindrical coordinates}
       {\var int\_x\_u(fu, ru)}
-     
+
 
 
 \begin{lstlisting}
@@ -128,7 +128,7 @@ double int_w_nabla_u_v(RealFunction* w1, RealFunction* w2,
 
 
 \begin{lstlisting}
-double int_a_dudx_dvdx_b_dudy_dvdy(double a, RealFunction* fu, 
+double int_a_dudx_dvdx_b_dudy_dvdy(double a, RealFunction* fu,
           double b, RealFunction* fv, RefMap* ru, RefMap* rv);
 \end{lstlisting}
 \info{$\volint a \dd{u}{x}\dd{v}{x} + b \dd{u}{y}\dd{v}{y} \dx$}

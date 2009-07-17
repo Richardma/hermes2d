@@ -9,7 +9,7 @@ const double Re = 1000000;
 const double visc = 1.0/Re;
 const double tau = 0.05;
 
-// stabilization 
+// stabilization
 const bool stab = true;
 const double delta_star = 1.0;
 const double tau_star = 1.0;
@@ -39,7 +39,7 @@ inline double int_stab_0_0(RealFunction* w1, RealFunction* w2,
 {
   Quad2D* quad = fu->get_quad_2d();
 
-  int o = fu->get_fn_order() + fv->get_fn_order() + 2 * w1->get_fn_order() + ru->get_inv_ref_order(); 
+  int o = fu->get_fn_order() + fv->get_fn_order() + 2 * w1->get_fn_order() + ru->get_inv_ref_order();
   limit_order(o);
 
   w1->set_quad_order(o, FN_VAL);
@@ -54,8 +54,8 @@ inline double int_stab_0_0(RealFunction* w1, RealFunction* w2,
 
   double *dudxx, *dudxy, *dudyy;
   dudxx = fu->get_dxx_values();
-  dudxy = fu->get_dxy_values();    
-  dudyy = fu->get_dyy_values();  
+  dudxy = fu->get_dxy_values();
+  dudyy = fu->get_dyy_values();
   double *dudx, *dudy;
   fu->get_dx_dy_values(dudx, dudy);
   double* uval = fu->get_fn_values();
@@ -64,31 +64,31 @@ inline double int_stab_0_0(RealFunction* w1, RealFunction* w2,
   double3* pt = quad->get_points(o);
   int np = quad->get_num_points(o);
   double2x2 *mu, *mv;
-  if (ru->is_jacobian_const()) 
+  if (ru->is_jacobian_const())
   {
-    for (int i = 0; i < np; i++) 
+    for (int i = 0; i < np; i++)
     {
-      mu = ru->get_const_inv_ref_map(); 
-      mv = rv->get_const_inv_ref_map(); 
+      mu = ru->get_const_inv_ref_map();
+      mv = rv->get_const_inv_ref_map();
       double a = (sqr((*mu)[0][0]) + sqr((*mu)[1][0]));
       double b = (sqr((*mu)[0][1]) + sqr((*mu)[1][1]));
       double c = 2.0 * ((*mu)[0][0]*(*mu)[0][1] + (*mu)[1][0]*(*mu)[1][1]);
       result += pt[i][2] * ( ( - ((dudxx[i]*a + dudxy[i]*c + dudyy[i]*b ) / Re)
                                + (w1val[i] * t_dudx + w2val[i] * t_dudy)
-                               + (uval[i] / tau) 
+                               + (uval[i] / tau)
                              )
-                             * ((w1val[i] * t_dvdx + w2val[i] * t_dvdy)) ); 
+                             * ((w1val[i] * t_dvdx + w2val[i] * t_dvdy)) );
     }
     result *= ru->get_const_jacobian();
   }
   else
   {
-    mu = ru->get_inv_ref_map(o); 
-    mv = rv->get_inv_ref_map(o); 
+    mu = ru->get_inv_ref_map(o);
+    mv = rv->get_inv_ref_map(o);
     double3x2 *mm;
-    mm = ru->get_second_ref_map(o); 
-    double* jac = ru->get_jacobian(o); 
-    for (int i = 0; i < np; i++, mu++, mv++, mm++) 
+    mm = ru->get_second_ref_map(o);
+    double* jac = ru->get_jacobian(o);
+    for (int i = 0; i < np; i++, mu++, mv++, mm++)
     {
       double a = (sqr((*mu)[0][0]) + sqr((*mu)[1][0]));
       double b = (sqr((*mu)[0][1]) + sqr((*mu)[1][1]));
@@ -97,9 +97,9 @@ inline double int_stab_0_0(RealFunction* w1, RealFunction* w2,
       double coefy = (*mm)[0][1] + (*mm)[2][1];
       result += pt[i][2] * (jac[i]) * ( ( - (( dudx[i]*coefx + dudy[i]*coefy + dudxx[i]*a + dudxy[i]*c + dudyy[i]*b ) / Re)
                                           + (w1val[i] * t_dudx + w2val[i] * t_dudy)
-                                          + (uval[i] / tau) 
+                                          + (uval[i] / tau)
                                         )
-                                        * ((w1val[i] * t_dvdx + w2val[i] * t_dvdy)) ); 
+                                        * ((w1val[i] * t_dvdx + w2val[i] * t_dvdy)) );
     }
   }
   return result;
@@ -111,7 +111,7 @@ inline double int_dudx_w_nabla_v(RealFunction* w1, RealFunction* w2,
 {
   Quad2D* quad = fu->get_quad_2d();
 
-  int o = fu->get_fn_order() + fv->get_fn_order() + w1->get_fn_order() + ru->get_inv_ref_order(); 
+  int o = fu->get_fn_order() + fv->get_fn_order() + w1->get_fn_order() + ru->get_inv_ref_order();
   limit_order(o);
 
   w1->set_quad_order(o, FN_VAL);
@@ -135,8 +135,8 @@ inline double int_dudy_w_nabla_v(RealFunction* w1, RealFunction* w2,
 {
   Quad2D* quad = fu->get_quad_2d();
 
-  
-  int o = fu->get_fn_order() + fv->get_fn_order() + w1->get_fn_order() + ru->get_inv_ref_order(); 
+
+  int o = fu->get_fn_order() + fv->get_fn_order() + w1->get_fn_order() + ru->get_inv_ref_order();
   limit_order(o);
 
   w1->set_quad_order(o, FN_VAL);
@@ -161,7 +161,7 @@ inline double int_w_nabla_v_w(RealFunction* w1, RealFunction* w2,
 {
   Quad2D* quad = fv->get_quad_2d();
 
-  int o = fw->get_fn_order() + fv->get_fn_order() + w1->get_fn_order() + rv->get_inv_ref_order(); 
+  int o = fw->get_fn_order() + fv->get_fn_order() + w1->get_fn_order() + rv->get_inv_ref_order();
   limit_order(o);
 
   w1->set_quad_order(o, FN_VAL);
@@ -176,13 +176,13 @@ inline double int_w_nabla_v_w(RealFunction* w1, RealFunction* w2,
   double* w2val = w2->get_fn_values();
 
   double result = 0.0;
-  double3* pt = quad->get_points(o); 
+  double3* pt = quad->get_points(o);
   int np = quad->get_num_points(o);
   double2x2 *mv;
-  mv = rv->get_inv_ref_map(o); 
-  double* jac = rv->get_jacobian(o); 
-  for (int i = 0; i < np; i++, mv++) 
-    result += pt[i][2] * jac[i] * ((w1val[i] * t_dvdx + w2val[i] * t_dvdy) * wval[i]); 
+  mv = rv->get_inv_ref_map(o);
+  double* jac = rv->get_jacobian(o);
+  for (int i = 0; i < np; i++, mv++)
+    result += pt[i][2] * jac[i] * ((w1val[i] * t_dvdx + w2val[i] * t_dvdy) * wval[i]);
 
   return result;
 }
@@ -200,49 +200,49 @@ scalar bilinear_form_unsym_0_0_1_1(RealFunction* fu, RealFunction* fv, RefMap* r
            int_w_nabla_u_v(&xprev, &yprev, fu, fv, ru, rv); }
 
 scalar bilinear_form_stab_0_0_1_1(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv)
-{ 
-    double param = delta_K[ru->get_active_element()->id]; 
+{
+    double param = delta_K[ru->get_active_element()->id];
     return param * int_stab_0_0(&xprev, &yprev, fu, fv, ru, rv);
 }
 
 scalar bilinear_form_stab_0_0(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv)
-  { 
+  {
     double param = tau_K[ru->get_active_element()->id];
-    return param * int_dudx_dvdx(fu, fv, ru, rv); 
+    return param * int_dudx_dvdx(fu, fv, ru, rv);
   }
 
 scalar bilinear_form_stab_0_1(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv)
-  { 
+  {
     double param = tau_K[ru->get_active_element()->id];
-    return param * int_dudx_dvdy(fv, fu, rv, ru); 
+    return param * int_dudx_dvdy(fv, fu, rv, ru);
   }
 
 scalar bilinear_form_stab_1_0(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv)
-  { 
+  {
     double param = tau_K[ru->get_active_element()->id];
-    return param * int_dudx_dvdy(fu, fv, ru, rv); 
+    return param * int_dudx_dvdy(fu, fv, ru, rv);
   }
 
 scalar bilinear_form_stab_1_1(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv)
-  { 
+  {
     double param = tau_K[ru->get_active_element()->id];
-    return param * int_dudy_dvdy(fu, fv, ru, rv); 
+    return param * int_dudy_dvdy(fu, fv, ru, rv);
   }
 
 scalar bilinear_form_unsym_0_2(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv)
-  { 
+  {
      if (stab) {
        double param = delta_K[ru->get_active_element()->id];
-       return -int_u_dvdx(fu, fv, ru, rv) + param * int_dudx_w_nabla_v(&xprev, &yprev, fu, fv, ru, rv); 
+       return -int_u_dvdx(fu, fv, ru, rv) + param * int_dudx_w_nabla_v(&xprev, &yprev, fu, fv, ru, rv);
      }
      else return -int_u_dvdx(fu, fv, ru, rv);
   }
 
 scalar bilinear_form_unsym_1_2(RealFunction* fu, RealFunction* fv, RefMap* ru, RefMap* rv)
-  { 
+  {
      if (stab) {
        double param = delta_K[ru->get_active_element()->id];
-       return -int_u_dvdy(fu, fv, ru, rv) + param * int_dudy_w_nabla_v(&xprev, &yprev, fu, fv, ru, rv); 
+       return -int_u_dvdy(fu, fv, ru, rv) + param * int_dudy_w_nabla_v(&xprev, &yprev, fu, fv, ru, rv);
      }
      else return -int_u_dvdy(fu, fv, ru, rv);
   }
@@ -254,17 +254,17 @@ scalar bilinear_form_unsym_2_1(RealFunction* fu, RealFunction* fv, RefMap* ru, R
   { return int_dudy_v(fu, fv, ru, rv); }
 
 scalar linear_form_0(RealFunction* fv, RefMap* rv)
-  { 
+  {
      RefMap* refmap = xprev.get_refmap();
      if (stab) {
        double param = delta_K[rv->get_active_element()->id];
-       return int_u_v(&xprev, fv, refmap, rv) / tau + param * int_w_nabla_v_w(&xprev, &yprev, &xprev, fv, refmap, rv) / tau;  
+       return int_u_v(&xprev, fv, refmap, rv) / tau + param * int_w_nabla_v_w(&xprev, &yprev, &xprev, fv, refmap, rv) / tau;
      }
-     else return int_u_v(&xprev, fv, refmap, rv) / tau; 
+     else return int_u_v(&xprev, fv, refmap, rv) / tau;
   }
 
 scalar linear_form_1(RealFunction* fv, RefMap* rv)
-  { 
+  {
      RefMap* refmap = yprev.get_refmap();
      if (stab) {
        double param = delta_K[rv->get_active_element()->id];
@@ -283,7 +283,7 @@ void calculate_elements_length(double* ele_len, double* u_infty, Solution* u1, S
   Quad2D* quad = &g_quad_2d_std;
   u1->set_quad_2d(quad);
   u2->set_quad_2d(quad);
-  
+
   Solution tmp;
   tmp.set_zero(mesh);
 
@@ -291,7 +291,7 @@ void calculate_elements_length(double* ele_len, double* u_infty, Solution* u1, S
   Transformable* tr[3] = { &tmp, u1, u2 };
   Traverse trav;
   trav.begin(3, meshes, tr);
-  
+
   int ne = mesh->get_max_element_id() + 1;
   double* a = new double[ne];
   double* b = new double[ne];
@@ -300,7 +300,7 @@ void calculate_elements_length(double* ele_len, double* u_infty, Solution* u1, S
   memset(b, 0, sizeof(double) * ne);
   memset(n, 0, sizeof(int) * ne);
 
-  Element** ee; 
+  Element** ee;
   while ((ee = trav.get_next_state(NULL, NULL)) != NULL)
   {
     int o = u1->get_fn_order();
@@ -322,8 +322,8 @@ void calculate_elements_length(double* ele_len, double* u_infty, Solution* u1, S
   for_all_active_elements(e, mesh)
   {
     // averaged values of velocities on elements of mesh
-    double c = a[e->id] / n[e->id]; 
-    double d = b[e->id] / n[e->id]; 
+    double c = a[e->id] / n[e->id];
+    double d = b[e->id] / n[e->id];
     u_infty[e->id] = (fabs(c) > fabs(d)) ? fabs(c) : fabs(d);
 
     double den = (sqrt(sqr(c) + sqr(d)));
@@ -354,7 +354,7 @@ void calculate_stabilization_parameters(double* delta_K, double* tau_K, double* 
   for_all_active_elements(e, mesh)
   {
     delta_K[e->id] = delta_star * sqr(h[e->id]);
-    tau_K[e->id] = tau_star * 1.0;   
+    tau_K[e->id] = tau_star * 1.0;
   }
 }
 
@@ -387,10 +387,10 @@ int criterion1(Element* e)
 int criterion2(Element* e)
 {
   for (int i = 0; i < e->nvert; i++)
-    if ((e->vn[i]->x < 1.5) && (e->vn[i]->x > -0.2) && (e->vn[i]->y < 0.5) && (e->vn[i]->y > -0.5)) 
-    {  
+    if ((e->vn[i]->x < 1.5) && (e->vn[i]->x > -0.2) && (e->vn[i]->y < 0.5) && (e->vn[i]->y > -0.5))
+    {
       if (e->is_triangle()) return 0;
-    
+
       double mid1x, mid1y, mid2x, mid2y;
       mid1x = 0.5 * (e->vn[1]->x + e->vn[2]->x);
       mid1y = 0.5 * (e->vn[1]->y + e->vn[2]->y);
@@ -402,7 +402,7 @@ int criterion2(Element* e)
       mid2x = 0.5 * (e->vn[2]->x + e->vn[3]->x);
       mid2y = 0.5 * (e->vn[2]->y + e->vn[3]->y);
       double v = sqrt(sqr(mid1x - mid2x) + sqr(mid1y - mid2y));
-    
+
       if (h > 3 * v) return 2;
       if (v > 3 * h) return 1;
       return 0;
@@ -418,14 +418,14 @@ int criterion2(Element* e)
 int main(int argc, char* argv[])
 {
   hermes2d_initialize(&argc, argv);
-  
+
   H1ShapesetBeuchler shapeset;
   PrecalcShapeset pss(&shapeset);
-  
+
   Mesh mesh;
   mesh.load("airfoil.mesh");
 
-  mesh.refine_by_criterion(criterion1, 2);  
+  mesh.refine_by_criterion(criterion1, 2);
   mesh.refine_by_criterion(criterion2, 3);
   mesh.refine_towards_boundary(1, 1);
 
@@ -433,11 +433,11 @@ int main(int argc, char* argv[])
   xvel.set_bc_types(xvel_bc_type);
   xvel.set_bc_values(xvel_bc_value);
   xvel.set_uniform_order(2);
-  
+
   H1Space yvel(&mesh, &shapeset);
   yvel.set_bc_types(yvel_bc_type);
   yvel.set_uniform_order(2);
-  
+
   H1Space press(&mesh, &shapeset);
   press.set_bc_types(press_bc_type);
   press.set_uniform_order(1);
@@ -445,7 +445,7 @@ int main(int argc, char* argv[])
   xprev.set_const(&mesh, 1.0);
   yprev.set_const(&mesh, 0.0);
 
- 
+
   WeakForm wf(3);
   wf.add_biform(0, 0, bilinear_form_unsym_0_0_1_1, UNSYM, 0, 2, &xprev, &yprev);
   if (stab) {
@@ -489,7 +489,7 @@ int main(int argc, char* argv[])
     delta_K = new double[ne];
     tau_K = new double[ne];
     if (stab) {
-      calculate_elements_length(ele_len, u_infty, &xprev, &yprev, &mesh); 
+      calculate_elements_length(ele_len, u_infty, &xprev, &yprev, &mesh);
       calculate_stabilization_parameters(delta_K, tau_K, ele_len, u_infty, &mesh);
     }
     delete [] ele_len;
@@ -520,7 +520,7 @@ int main(int argc, char* argv[])
 
     printf("\n");
   }
-  
+
   hermes2d_finalize();
 }
 

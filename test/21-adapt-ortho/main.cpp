@@ -35,7 +35,7 @@ static double fndd(double x, double y, double& dx, double& dy)
 
 
 scalar bc_values(int marker, double x, double y)
-{  
+{
   return fn(x, y);
 }
 
@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
   #else
   mesh.load("lshape.mesh");
   #endif
-  
+
   H1ShapesetOrtho shapeset;
   PrecalcShapeset pss(&shapeset);
 
@@ -91,7 +91,7 @@ int main(int argc, char* argv[])
   #ifndef LSHAPE
   dp.set_linear_form(0, linear_form);
   #endif
-  
+
   DiscreteProblem rp;
   rp.copy(&dp);
   rp.set_spaces(1, &rspace);
@@ -128,7 +128,7 @@ int main(int argc, char* argv[])
     dp.create_matrix();
     dp.assemble_matrix_and_rhs();
     Solution sln;
-    dp.solve_system(1, &sln);    
+    dp.solve_system(1, &sln);
 
     view.show(&sln);
     ord.show(&space);
@@ -160,8 +160,8 @@ int main(int argc, char* argv[])
     #else
     graph.save("conv_lshape.gp");
     #endif
-    
-    
+
+
 /*    begin_time();
     H1OrthoHP hp(1, &space);
     double error = hp.calc_error(&sln, &rsln) * 100;
@@ -171,8 +171,8 @@ int main(int argc, char* argv[])
     #else
     if (error < 0.001) break;
     #endif
-    
-    begin_time();    
+
+    begin_time();
     hp.adapt(0.3);
     info("  (in %g sec)", end_time());*/
   }

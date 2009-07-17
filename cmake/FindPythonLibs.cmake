@@ -59,7 +59,7 @@ FOREACH(_CURRENT_VERSION ${PYTHON_VERSION} 2.6 2.5 2.4 2.3 2.2 2.1 2.0 1.6 1.5)
     PATH_SUFFIXES
       python${_CURRENT_VERSION}
   )
-  
+
 ENDFOREACH(_CURRENT_VERSION)
 
 MARK_AS_ADVANCED(
@@ -97,7 +97,7 @@ FIND_PACKAGE_HANDLE_STANDARD_ARGS(PythonLibs DEFAULT_MSG PYTHON_LIBRARIES PYTHON
 
 
 # PYTHON_ADD_MODULE(<name> src1 src2 ... srcN) is used to build modules for python.
-# PYTHON_WRITE_MODULES_HEADER(<filename>) writes a header file you can include 
+# PYTHON_WRITE_MODULES_HEADER(<filename>) writes a header file you can include
 # in your sources to initialize the static python modules
 
 GET_PROPERTY(_TARGET_SUPPORTS_SHARED_LIBS
@@ -132,7 +132,7 @@ FUNCTION(PYTHON_WRITE_MODULES_HEADER _filename)
 
   SET(_filenameTmp "${_filename}.in")
   FILE(WRITE ${_filenameTmp} "/*Created by cmake, do not edit, changes will be lost*/\n")
-  FILE(APPEND ${_filenameTmp} 
+  FILE(APPEND ${_filenameTmp}
 "#ifndef ${_name}
 #define ${_name}
 
@@ -148,7 +148,7 @@ extern \"C\" {
     FILE(APPEND ${_filenameTmp} "extern void init${PYTHON_MODULE_PREFIX}${_currentModule}(void);\n\n")
   ENDFOREACH(_currentModule ${PY_STATIC_MODULES_LIST})
 
-  FILE(APPEND ${_filenameTmp} 
+  FILE(APPEND ${_filenameTmp}
 "#ifdef __cplusplus
 }
 #endif /* __cplusplus */
@@ -165,7 +165,7 @@ extern \"C\" {
     FILE(APPEND ${_filenameTmp} "  CMakeLoadPythonModule_${_currentModule}();\n")
   ENDFOREACH(_currentModule ${PY_STATIC_MODULES_LIST})
   FILE(APPEND ${_filenameTmp} "}\n#endif\n\n#endif\n")
-  
+
 # with CONFIGURE_FILE() cmake complains that you may not use a file created using FILE(WRITE) as input file for CONFIGURE_FILE()
   EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E copy_if_different "${_filenameTmp}" "${_filename}" OUTPUT_QUIET ERROR_QUIET)
 
