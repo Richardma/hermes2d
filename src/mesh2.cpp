@@ -22,6 +22,7 @@
 #include "common.h"
 #include "mesh.h"
 #include "mesh_parser.h"
+#include "fmemopen.h"
 
 
 extern unsigned g_mesh_seq;
