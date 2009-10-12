@@ -248,6 +248,27 @@ cdef class Mesh:
         return node_dict
 
     @property
+    def curves(self):
+        """ 
+        Return curves 
+        """
+        crv = {}
+        for i in range(self.num_elements):
+            el = self.get_element(i)
+            if el.active:
+                for j in range(1,4):
+                    try:
+                        n = el.curved_map.get_nurbs(j)
+                        sp = (n.pt[0][0], n.pt[0][1])
+                        cp = (n.pt[1][0], n.pt[1][1])
+                        ep = (n.pt[2][0], n.pt[2][1])
+                        crv[i] = []
+                        crv[i].append([sp, cp ,ep])
+                    except Exception, e:
+                        break
+        return crv
+
+    @property
     def num_elements(self):
         return self.thisptr.get_num_elements()
 
@@ -281,18 +302,17 @@ cdef class Mesh:
         self.create(nodes, elements, boundary, nurbs)
 
     def get_elements_order(self, space):
+        """
+        Returns list of orders
+        """
         orders_list = []
-        
         for i in range(self.num_elements):
             el = self.get_element(i)
             if el.active:
                 order = space.get_element_order(i)
-                
                 h = order & ((1 << 5) - 1)
                 v = order >> 5
-                
                 orders_list.append(int((h+v)/2))
-
         return orders_list
 
     def create(self, nodes, elements, boundary, nurbs):
