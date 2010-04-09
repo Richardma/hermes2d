@@ -589,6 +589,24 @@ void Mesh::refine_element(int id, int refinement)
 }
 
 
+void Mesh::convert_element(int id)
+{
+  Mesh tmp;
+  Element* e = get_element(id);
+  if (!e->used) error("invalid element id number.");
+  if (!e->active) error("attempt to refine element #%d which has been refined already.", e->id);
+
+  if (e->is_triangle())
+    refine_triangle_to_quads(e);
+  else
+    refine_quad_to_triangles(e);
+
+  tmp.copy_converted(this);
+  copy(&tmp);
+  seq = g_mesh_seq++;
+}
+
+
 void Mesh::refine_all_elements(int refinement)
 {
   Element* e;

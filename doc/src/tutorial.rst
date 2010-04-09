@@ -220,7 +220,48 @@ Every main.cpp file is finished with
 
 so that you have a chance to see the graphical output.
 
+Mesh Convert
+~~~~~~~~~~~~
+Quadrilateral and triangular elements are different. The former are clearly better for the approximation of anisotropic phenomena (such as boundary layers) while the latter lead to faster assembly due to a constant Jacobian of the reference map (this only holds for triangles with straight edges). Hermes allows you to easily convert any given quadrilateral element into two triangles, and vice versa any given triangle into three quads. You can also convert all triangles in the mesh into quads at once, and vice versa. Please note that the current mesh convert method is only used to the initial mesh.
+As a ''Hello world'' example, let us reload the mesh we have just created, and display it with mesh convert method. The following portion of code illustrates two types of mesh convert method:
+::
 
+    #include "hermes2d.h"
+
+    int main(int argc, char* argv[])
+    {
+      // load the mesh file
+      Mesh mesh;
+      H2DReader mloader;
+      mloader.load("domain.mesh", &mesh);
+
+      // perform one sample mesh convert method
+      mesh.convert_element(0);            // convert element #0 
+      mesh.convert_triangles_to_quads();  // convert every triangle element  
+                                          // into three quadrangle elements
+
+      MeshView mview("Hello world!", 100, 100, 500, 500);
+      mview.show(&mesh);
+
+See the file `src/mesh.cpp <http://hpfem.org/git/gitweb.cgi/hermes2d.git/blob/HEAD:/src/mesh.cpp>`_ for more details.
+
+.. image:: img/Mesh_convert_triangles_to_quads.png
+   :align: center
+   :width: 400
+   :height: 400
+   :alt: Image of the mesh created via the Mesh::convert_triangles_to_quads() method.
+
+another method of mesh convert on the fly include
+::
+ 
+    Mesh::convert_quads_to_triangles();  // convert every quadrangle element 
+                                         // into two triangle elements
+
+.. image:: img/Mesh_convert_quads_to_triangles.png
+   :align: center
+   :width: 400
+   :height: 400
+   :alt: Image of the mesh created via the Mesh::convert_quads_to_triangles() method.
 
 Setting Up Finite Element Space
 -------------------------------

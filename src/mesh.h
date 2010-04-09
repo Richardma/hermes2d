@@ -196,6 +196,11 @@ public:
   /// refine vertically.
   void refine_element(int id, int refinement = 0);
 
+  /// Convert an element. 
+  /// If the element is a quad, then creates three triangles.
+  /// If the element is a triangle, then creates two quads.
+  void convert_element(int id);
+
   /// Refines all elements.
   /// \param refinement [in] Same meaning as in refine_element().
   void refine_all_elements(int refinement = 0);
