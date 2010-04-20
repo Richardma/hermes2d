@@ -3,7 +3,7 @@
 template<class T>
 void Array::save_raw(FILE* f)
 {
-  int itemsize = sizeof(T), pagesize = PAGE_SIZE;
+  int itemsize = sizeof(T), pagesize = H2D_PAGE_SIZE;
   hermes2d_fwrite("H2DA\001\000\000\000", 1, 8, f);
   hermes2d_fwrite(&size, sizeof(int), 1, f);
   hermes2d_fwrite(&nitems, sizeof(int), 1, f);
@@ -14,7 +14,7 @@ void Array::save_raw(FILE* f)
   int npages = pages.size();
   hermes2d_fwrite(&npages, sizeof(int), 1, f);
   for (int i = 0; i < npages; i++)
-    hermes2d_fwrite(pages[i], itemsize, PAGE_SIZE, f);
+    hermes2d_fwrite(pages[i], itemsize, H2D_PAGE_SIZE, f);
 }
 
 
@@ -37,7 +37,7 @@ void Array::load_raw(FILE* f)
   hermes2d_fread(&pagesize, sizeof(int), 1, f);
   if (itemsize != sizeof(T))
     error("Item size mismatch.");
-  if (pagesize != PAGE_SIZE)
+  if (pagesize != H2D_PAGE_SIZE)
     error("Page size mismatch.");
 
   int i, npages;
@@ -45,9 +45,9 @@ void Array::load_raw(FILE* f)
   pages.clear();
   for (i = 0; i < npages; i++)
   {
-    T* new_page = new T[PAGE_SIZE];
+    T* new_page = new T[H2D_PAGE_SIZE];
     pages.push_back(new_page);
-    hermes2d_fread(new_page, itemsize, PAGE_SIZE, f);
+    hermes2d_fread(new_page, itemsize, H2D_PAGE_SIZE, f);
   }
 
   unused.clear();

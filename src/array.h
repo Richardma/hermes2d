@@ -41,8 +41,8 @@ protected:
   bool append_only;
 
   static const int PAGE_BITS = 10;
-  static const int PAGE_SIZE = 1 << PAGE_BITS;
-  static const int PAGE_MASK = PAGE_SIZE-1;
+  static const int H2D_PAGE_SIZE = 1 << PAGE_BITS;
+  static const int PAGE_MASK = H2D_PAGE_SIZE-1;
 
 public:
 
@@ -69,8 +69,8 @@ public:
 
     for (unsigned i = 0; i < pages.size(); i++)
     {
-      T* new_page = new T[PAGE_SIZE];
-      memcpy(new_page, pages[i], sizeof(T) * PAGE_SIZE);
+      T* new_page = new T[H2D_PAGE_SIZE];
+      memcpy(new_page, pages[i], sizeof(T) * H2D_PAGE_SIZE);
       pages[i] = new_page;
     }
   }
@@ -106,7 +106,7 @@ public:
     {
       if (!(size & PAGE_MASK))
       {
-        T* new_page = new T[PAGE_SIZE];
+        T* new_page = new T[H2D_PAGE_SIZE];
         pages.push_back(new_page);
       }
       item = pages[size >> PAGE_BITS] + (size & PAGE_MASK);
@@ -146,12 +146,12 @@ public:
     free();
     while (size > 0)
     {
-      T* new_page = new T[PAGE_SIZE];
-      memset(new_page, 0, sizeof(T) * PAGE_SIZE);
+      T* new_page = new T[H2D_PAGE_SIZE];
+      memset(new_page, 0, sizeof(T) * H2D_PAGE_SIZE);
       pages.push_back(new_page);
-      size -= PAGE_SIZE;
+      size -= H2D_PAGE_SIZE;
     }
-    this->size = pages.size() * PAGE_SIZE;
+    this->size = pages.size() * H2D_PAGE_SIZE;
   }
 
   /// Counts the items in the array and registers unused items.
@@ -173,7 +173,7 @@ public:
   {
     if (!(size & PAGE_MASK))
     {
-      T* new_page = new T[PAGE_SIZE];
+      T* new_page = new T[H2D_PAGE_SIZE];
       pages.push_back(new_page);
     }
     T* item = pages[size >> PAGE_BITS] + (size & PAGE_MASK);

@@ -176,19 +176,19 @@ void LinSystem::free()
 // memory that will be required for the final matrix (8 bytes vs. 12 bytes per nonzero element).
 // After counting the nonzero elements all pages are freed, so no matrix memory is wasted.
 
-static const int page_size = 61; // => sizeof(Page) == 256 on x86_64
+static const int H2D_PAGE_SIZE = 61; // => sizeof(Page) == 256 on x86_64
 
 struct Page
 {
   int count;
-  int idx[page_size];
+  int idx[H2D_PAGE_SIZE];
   Page* next;
 };
 
 
 static inline void page_add_ij(Page** pages, int i, int j)
 {
-  if (pages[i] == NULL || pages[i]->count >= page_size)
+  if (pages[i] == NULL || pages[i]->count >= H2D_PAGE_SIZE)
   {
     Page* new_page = new Page;
     new_page->count = 0;

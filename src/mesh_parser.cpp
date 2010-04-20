@@ -44,13 +44,13 @@ void serror(const char* msg, ...)
 
 //// memory management /////////////////////////////////////////////////////////////////////////////
 
-static const int PAGE_SIZE = 32*1024; // 32K
+static const int H2D_PAGE_SIZE = 32*1024; // 32K
 static std::vector<char*> pages;
 static int last_page_size;
 
 static void init_mem()
 {
-  last_page_size = PAGE_SIZE;
+  last_page_size = H2D_PAGE_SIZE;
   pages.clear();
 }
 
@@ -58,10 +58,10 @@ static void* new_block(int size)
 {
   // this is a simple and fast memory allocation function
   char* p;
-  if (last_page_size + size <= PAGE_SIZE)
+  if (last_page_size + size <= H2D_PAGE_SIZE)
     p = pages.back();
   else {
-    p = (char*) malloc(PAGE_SIZE);
+    p = (char*) malloc(H2D_PAGE_SIZE);
     last_page_size = 0;
     pages.push_back(p);
   }
